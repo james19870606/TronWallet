@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <WebView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/webView"/>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="設定privateKey"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/private_key"
+        android:hint="私钥输入框"
+        android:text="48bc5cf8d36b8747f109a975ddf46dc4642cc286889b3969f500feb9e41d3c4b"/>
+
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/reset_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="同一個App下有多個波場錢包，在進行錢包切換的時候，會使用到. \n當然也可以重新調用TronWeb.setup（）方法重新創建TronWeb實例，只是效率沒有重置私密金鑰那麼高"/>
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:text="重新設定privateKey"
+        android:textAllCaps="false"
+        android:id="@+id/btn_reset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

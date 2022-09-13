@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="TronWeb.js" ></script>
+<script>
+    function addBridgeForAndroidWebView() {
+        if (window.WebViewJavascriptBridge) {
+            return;
+        }
+        window.WebViewJavascriptBridge = {
+            registerHandler: registerHandler,
+            callHandler: callHandler,
+            handleMessageFromNative: handleMessageFromNative
+        };
+        let messageHandlers = {};
+        let responseCallbacks = {};
+        let uniqueId = 1;
+        function registerHandler(handlerName, handler) {
+            messageHandlers[handlerName] = handler;
+        }
+        function callHandler(handlerName, data, responseCallback) {
+            if (arguments.length === 2 && typeof data == 'function') {
+                responseCallback = data;
+                data = null;
+            }
+            doSend({ handlerName:handlerName, data:data }, responseCallback);
+        }
+        function doSend(message, responseCallback) {
+            if (responseCallback) {
+                const callbackId = 'cb_'+(uniqueId++)+'_'+new Date().getTime();
+                responseCallbacks[callbackId] = responseCallback;
+                message['callbackId'] = callbackId;
+            }
+            window.normalPipe.postMessage(JSON.stringify(message));
+        }
+        function handleMessageFromNative(messageJSON) {
+            const message = JSON.parse(messageJSON);
+            let responseCallback;
+            if (message.responseId) {
+                responseCallback = responseCallbacks[message.responseId];
+                if (!responseCallback) {
+                    return;
+                }
+                responseCallback(message.responseData);
+                delete responseCallbacks[message.responseId];
+            } else {
+                if (message.callbackId) {
+                    const callbackResponseId = message.callbackId;
+                    responseCallback = function(responseData) {
+                        doSend({ handlerName:message.handlerName, responseId:callbackResponseId, responseData:responseData });
+                    };
+                }
+                const handler = messageHandlers[message.handlerName];
+                if (!handler) {
+                    console.log("WebViewJavascriptBridge: WARNING: no handler for message from Kotlin:", message);
+                } else {
+                    handler(message.data, responseCallback);
+                }
+            }
+        }
+    }
+
+</script>
+<script>
+        let bridge = window.WebViewJavascriptBridge;
+        if (!bridge ){
+            addBridgeForAndroidWebView()
+            bridge = window.WebViewJavascriptBridge;
+        }
+        bridge.registerHandler('generateTronWebInstance', function(response, responseCallback) {
+            let privateKey = response.privateKey;
+            let node = response.node;
+            let apiKey = response.apiKey;
+            const tronInstance = new TronWeb({
+                fullHost: node,
+                headers: { "TRON-PRO-API-KEY": apiKey },
+                privateKey: privateKey
+            })
+            if (tronInstance){
+                window.tronInstance = tronInstance;
+                const result = {result:"1"};
+                responseCallback(result);
+            }else {
+                const result = {result:"0"};
+                responseCallback(result);
+            }
+        });
+
+        bridge.registerHandler('resetPrivateKey', function(data, responseCallback) {
+            try {
+                window.tronInstance.setPrivateKey(data.privateKey);
+                let result = {result: true};
+                responseCallback(result);
+            } catch(err) {
+                let result = {result: false,err: 'Invalid private key provided'};
+                responseCallback(result);
+            }
+        });
+
+        bridge.registerHandler('getAccount', function(data, responseCallback) {
+            window.tronInstance.trx.getAccount(data.address).
+            then(result =>{responseCallback(result)}).
+            catch(err=>{responseCallback(err);});
+        });
+
+        bridge.registerHandler('isTRXAddress', function(data, responseCallback) {
+            let result = window.tronInstance.isAddress(data.address);
+            responseCallback(result);
+        });
+
+        bridge.registerHandler('tokenTransfer', function(data, responseCallback) {
+            tokenTransfer(function (output){
+                responseCallback(output)
+            })
+            function tokenTransfer(callBack){
+                const CONTRACT = data.trc20ContractAddress;
+                const ACCOUNT = data.toAddress;
+                async function main() {
+                    let {transaction, result} = await window.tronInstance.transactionBuilder.triggerSmartContract(
+                        CONTRACT, 'transfer(address,uint256)', {
+                            feeLimit: data.feeLimit,
+                            callValue: 0
+                        },
+                        [{
+                            type: 'address',
+                            value: ACCOUNT
+                        }, {
+                            type: 'uint256',
+                            value: data.amount
+                        }]
+                    );
+                    if (!result.result) {
+                        console.error("error:", result);
+                        return;
+                    }
+                    const unSignedTxnWithNote = await window.tronInstance.transactionBuilder.addUpdateData(transaction, data.remark, 'utf8');
+                    const signedTxn = await window.tronInstance.trx.sign(unSignedTxnWithNote);
+                    const ret = await window.tronInstance.trx.sendRawTransaction(signedTxn);
+                    return ret
+                }
+                main()
+                    .then((ret) => {
+                        callBack(ret);})
+                    .catch((err) => {
+                        let ret = {result:false,err:err}
+                        callBack(ret);
+                    });
+            }
+        });
+        //支持備註的版本
+        bridge.registerHandler('trxTransferWithRemark', function(data, responseCallback) {
+            trxTransfer(function (output){
+                responseCallback(output)
+            })
+            function trxTransfer(callBack){
+                async function main() {
+                    const unSignedTxn = await window.tronInstance.transactionBuilder.sendTrx(data.toAddress, data.amount);
+                    const unSignedTxnWithNote = await window.tronInstance.transactionBuilder.addUpdateData(unSignedTxn, data.remark, 'utf8');
+                    const signedTxn = await window.tronInstance.trx.sign(unSignedTxnWithNote);
+                    return await window.tronInstance.trx.sendRawTransaction(signedTxn)
+                }
+                main().then((ret) => {
+                    callBack(ret)
+                }).catch((err) => {
+                    let callBackData = {"result":false,"error":err}
+                    callBack(callBackData)
+                });
+            }
+        });
+
+        //不支持備註的版本
+        bridge.registerHandler('trxTransfer', function(data, responseCallback) {
+            window.tronInstance.trx.sendTransaction(data.toAddress, data.amount)
+                .then((ret) => {
+                    responseCallback(ret)})
+                .catch((err) => {
+                    let ret = {result:false,err:err}
+                    responseCallback(ret)
+                });
+        });
+
+        //査詢trc20代幣餘額
+        bridge.registerHandler('getTRC20TokenBalance', function(data, responseCallback) {
+            window.tronInstance.contract().at(data.trc20ContractAddress).then(
+                contract =>
+                {
+                    contract.balanceOf(data.address).call().then(
+                        res =>
+                        {
+                            console.log("then 流程");
+                            let balance = TronWeb.toDecimal(res._hex);
+                            let finalBalance = balance / Math.pow(10,data.decimalPoints);
+                            let result = {"state":true,"result":String(finalBalance)};
+                            responseCallback(result);
+                        }
+                        ,error =>{
+                            console.log("error 流程");
+                            let result = {"state":false,"result":error}
+                            responseCallback(result);
+                        }
+                    )
+                }).catch(error=>{
+                let result = {"state":false,"result":"合約生成失敗,請檢查該地址是否啟動."};
+                responseCallback(result);
+            })
+        });
+
+        //査詢TRX餘額
+        bridge.registerHandler('getTRXBalance', function(data, responseCallback) {
+            window.tronInstance.trx.getBalance(
+                data.address,
+            ).then(output => {
+                let balance = TronWeb.fromSun(output)
+                let ret = {"state":true,"result":balance}
+                responseCallback(ret);
+            }).catch((err) => {
+                let ret = {"state":false,"result":err}
+                responseCallback(ret)
+            });
+        });
+
+        bridge.callHandler('FinishLoad', {'key': 'value'}, function(response) {
+
+        });
+</script>
+<body>
+</body>
+</html>
+

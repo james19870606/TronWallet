@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <WebView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/webView"/>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Nile測試網獲取帳戶資訊"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/address"
+        android:hint="査詢地址輸入框"
+        android:text="TSwaZihvhdYogpoV9sJxMjEfK38AymSMY7"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/account_detail"
+        android:hint=""
+        android:textColor="@color/black"
+        android:text="等待查询地址详情"/>
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:text="帳戶査詢"
+        android:textAllCaps="false"
+        android:id="@+id/btn_getBalance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
