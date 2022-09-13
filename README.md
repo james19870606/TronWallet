@@ -4,7 +4,7 @@
 ![language](https://img.shields.io/badge/Language-Kotlin-green)
 [![CocoaPods](https://img.shields.io/badge/support-jitpack-green)](https://www.swift.org/getting-started/#using-the-package-manager)
 
-![](Resource/DemoImage01.png)
+![](Resource/DemoImage0.png)
 
 波场私钥、助记词、Keystore的生成，推荐使用 [TrustWalletCore](https://github.com/trustwallet/wallet-core)
 
