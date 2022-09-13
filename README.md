@@ -1,72 +1,81 @@
-# TronWeb
-**TronWeb** is an iOS toolbelt for interaction with the Tron network.
+# TronWallet
+**TronWallet** is an Android toolbelt for interaction with the Tron network.
 
-![language](https://img.shields.io/badge/Language-Swift-green)
-[![Support](https://img.shields.io/badge/support-iOS%209%2B%20-FB7DEC.svg?style=flat)](https://www.apple.com/nl/ios/)&nbsp;
-[![CocoaPods](https://img.shields.io/badge/support-Cocoapods-green)](https://www.swift.org/getting-started/#using-the-package-manager)
+![language](https://img.shields.io/badge/Language-Kotlin-green)
+[![CocoaPods](https://img.shields.io/badge/support-jitpack-green)](https://www.swift.org/getting-started/#using-the-package-manager)
 
 ![](Resource/DemoImage01.png)
 
 波场私钥、助记词、Keystore的生成，推荐使用 [TrustWalletCore](https://github.com/trustwallet/wallet-core)
 
-For more specific usage, please refer to the [demo](https://github.com/james19870606/TronWeb/tree/master/Demo/TronWebDemo)
+For more specific usage, please refer to the [demo](https://github.com/james19870606/TronWallet/tree/master/app)
 
-###  CocoaPods
+## JitPack.io
 
-```ruby
-pod 'TronWeb', '~> 1.0.1'
-```
-
-### Example usage
-
-```swift
-import TronWeb
+I strongly recommend https://jitpack.io
+```groovy
+repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+}
+dependencies {
+    implementation 'com.github.SDBridge:SDBridgeKotlin:1.0.3'
+}
 ```
 
 ##### Setup TronWeb
-```swift
-let tronWeb = TronWeb()
-let privateKey = ""
-let TRONApiKey = ""
-if tronWeb.isGenerateTronWebInstanceSuccess != true {
-    tronWeb.setup(privateKey: privateKey, node: chainType == .main ? TRONMainNet : TRONNileNet) { [weak self] setupResult in
-        guard let self = self else { return }
-        if setupResult {
-            self.transferType == .trx ? self.trxTransfer() : self.trc20Transfer()
-        }
-    }
-} else {
-    self.transferType == .trx ? self.trxTransfer() : self.trc20Transfer()
+```kotlin
+ val onCompleted = {result : Boolean ->
+            println("onCompleted------->>>>>")
+            println(result)
+            if (action == "trxTransfer") trxTransfer() else trc20Transfer()
+  }
+val privateKey = privateKeyEditText?.text.toString()
+val node = if(position == 0) TRONMainNet else TRONNileNet
+if (tronweb?.isGenerateTronWebInstanceSuccess == false) {
+    tronweb?.setup(true, privateKey, node = node,onCompleted = onCompleted)
+} else  {
+    if (action == "trxTransfer") trxTransfer() else  trc20Transfer()
 }
 ```
 
 ##### Send TRX
-```swift
-let remark = ""
-let toAddress = ""
-let amountText = "1" // This value is 0.000001 
-tronWeb.trxTransferWithRemark(remark: remark, toAddress: toAddress, amount: amountText) { [weak self] (state, txid) in
-    guard let self = self else { return }
-    print("state = \(state)")
-    print("txid = \(txid)")
-    
+```Kotlin
+val remark = ""
+val toAddress = ""
+val amount = ""
+val onCompleted = {result : Boolean, txid: String ->
+    this.runOnUiThread {
+        println(txid)
+    }
 }
+tronweb?.trxTransferWithOutRemark(
+    toAddress ,
+    amount ,
+    onCompleted = onCompleted)
+
 ```
 ##### Send TRC20
-```swift
-let remark = ""
-let toAddress = ""
-let amountText = "1" // This value is 0.000001 
-let trc20Address = ""
-tronWeb.trc20TokenTransfer(toAddress: toAddress, trc20ContractAddress: trc20Address, amount: amountText, remark: remark, feeLimit: "100000000") { [weak self] (state, txid) in
-    guard let self = self else { return }
-    print("state = \(state)")
-    print("txid = \(txid)")
+```Kotlin
+val remark = ""
+val toAddress = ""
+val trc20ContractAddress = ""
+val amount = ""
+val onCompleted = {result : Boolean, txid: String ->
+    this.runOnUiThread {
+         println(txid)
+    }
 }
+tronweb?.trc20TokenTransfer(
+    toAddress,
+    trc20ContractAddress,
+    amount,
+    remark,
+    onCompleted = onCompleted)
 ```
 
-更详细的使用方法,建议参考 [demo](https://github.com/james19870606/TronWeb/tree/master/Demo/TronWebDemo)
+更详细的使用方法,建议参考 [demo](https://github.com/james19870606/TronWallet/tree/master/app)
 
 ## License
 
-TronWeb is released under the MIT license. [See LICENSE](https://github.com/james19870606/TronWeb/blob/master/LICENSE) for details.
+TronWeb is released under the MIT license. [See LICENSE](https://github.com/james19870606/TronWallet/LICENSE) for details.
