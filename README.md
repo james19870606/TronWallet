@@ -4,7 +4,7 @@
 ![language](https://img.shields.io/badge/Language-Kotlin-green)
 [![CocoaPods](https://img.shields.io/badge/support-jitpack-green)](https://www.swift.org/getting-started/#using-the-package-manager)
 
-![](Resource/DemoImage0.png)
+![](Resource/DemoImage0.jpeg)
 
 波场私钥、助记词、Keystore的生成，推荐使用 [TrustWalletCore](https://github.com/trustwallet/wallet-core)
 
@@ -19,7 +19,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.SDBridge:SDBridgeKotlin:1.0.3'
+	implementation 'com.github.james19870606:TronWallet:1.0.1'
 }
 ```
 
