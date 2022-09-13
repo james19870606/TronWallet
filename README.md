@@ -19,23 +19,23 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-	implementation 'com.github.james19870606:TronWallet:1.0.1'
+    implementation 'com.github.james19870606:TronWallet:1.0.1'
 }
 ```
 
 ##### Setup TronWeb
 ```kotlin
- val onCompleted = {result : Boolean ->
-            println("onCompleted------->>>>>")
-            println(result)
-            if (action == "trxTransfer") trxTransfer() else trc20Transfer()
-  }
+val onCompleted = {result : Boolean ->
+    println("onCompleted------->>>>>")
+    println(result)
+    if (action == "trxTransfer") trxTransfer() else trc20Transfer()
+}
 val privateKey = privateKeyEditText?.text.toString()
 val node = if(position == 0) TRONMainNet else TRONNileNet
 if (tronweb?.isGenerateTronWebInstanceSuccess == false) {
-    tronweb?.setup(true, privateKey, node = node,onCompleted = onCompleted)
+tronweb?.setup(true, privateKey, node = node,onCompleted = onCompleted)
 } else  {
-    if (action == "trxTransfer") trxTransfer() else  trc20Transfer()
+if (action == "trxTransfer") trxTransfer() else  trc20Transfer()
 }
 ```
 
