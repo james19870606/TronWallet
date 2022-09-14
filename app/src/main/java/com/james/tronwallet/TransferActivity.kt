@@ -44,11 +44,9 @@ class TransferActivity : AppCompatActivity() {
         mWebView = findViewById(R.id.webView)
         tronweb = TronWeb(this, _webView = mWebView!!)
         transferBtn?.setOnClickListener{
-            println("点击了转账按钮")
             transfer()
         }
         detailBtn?.setOnClickListener{
-            println("点击了详情按钮")
             val hash = hashValue?.text.toString()
             if (hash.length < 20) { return@setOnClickListener}
             var urlString = if(position == 0)  "https://tronscan.org/#/transaction/" else "https://nile.tronscan.org/#/transaction/"
@@ -123,7 +121,7 @@ class TransferActivity : AppCompatActivity() {
             action = bundle.getString("action") ?: ""
             position = bundle.getInt("position") ?: 0
             println("this position:$position  action:$action")
-            title?.text = if (position == 0) "主网转账" else "Nile测试网转账"
+            title?.text = if (position == 0) "主網轉帳" else "Nile測試網轉帳"
             if (action == "trxTransfer") {
                 trc20EditText?.setVisibility(View.GONE)
             }

@@ -31,7 +31,6 @@ class GetAccountActivity : AppCompatActivity() {
         mWebView =  findViewById(R.id.webView)
         tronweb = TronWeb(this, _webView = mWebView!!)
         getDetailBtn?.setOnClickListener{
-            println("点击了按钮")
             getDetail()
         }
     }
@@ -50,7 +49,6 @@ class GetAccountActivity : AppCompatActivity() {
         }
     }
     private fun getDetailAction(){
-        println("开始查询 getDetailAction---->")
         val address = address?.text.toString()
         if (address.isNotEmpty()) {
             val onCompleted = {map:HashMap<String, Any> ->

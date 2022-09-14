@@ -27,27 +27,21 @@ class TestAdapter(arrayData: ArrayList<TestData>) : RecyclerView.Adapter<Recycle
             holder.btnTest4?.text = listData[position].btnTest4
             holder.btnTest5?.text = listData[position].btnTest5
             holder.btnTest?.setOnClickListener{
-                println("点击了按钮$position")
                 this.lambda(position,listData[position].btnTest)
             }
             holder.btnTest1?.setOnClickListener{
-                println("点击了按钮$position")
                 this.lambda(position,listData[position].btnTest1)
             }
             holder.btnTest2?.setOnClickListener{
-                println("点击了按钮$position")
                 this.lambda(position,listData[position].btnTest2)
             }
             holder.btnTest3?.setOnClickListener{
-                println("点击了按钮$position")
                 this.lambda(position,listData[position].btnTest3)
             }
             holder.btnTest4?.setOnClickListener{
-                println("点击了按钮$position")
                 this.lambda(position,listData[position].btnTest4)
             }
             holder.btnTest5?.setOnClickListener{
-                println("点击了按钮$position")
                 this.lambda(position,listData[position].btnTest5)
             }
         }

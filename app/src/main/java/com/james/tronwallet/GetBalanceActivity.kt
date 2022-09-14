@@ -35,7 +35,6 @@ class GetBalanceActivity : AppCompatActivity() {
         mWebView =  findViewById(R.id.webView)
         tronweb = TronWeb(this, _webView = mWebView!!)
         getBalanceBtn?.setOnClickListener{
-            println("点击了按钮")
             getBalance()
         }
     }
@@ -55,7 +54,6 @@ class GetBalanceActivity : AppCompatActivity() {
     }
     @SuppressLint("SetTextI18n")
     private fun getTRXBalance() {
-        println("开始查询 getTRXBalance---->")
         val address = address?.text.toString()
         if (address.isNotEmpty()) {
             val onCompleted = {result : Boolean, amount: String ->
@@ -70,7 +68,6 @@ class GetBalanceActivity : AppCompatActivity() {
         }
     }
     private fun getTRC20Balance() {
-        println("开始查询 getTRC20Balance---->")
         val address = address?.text.toString()
         val trc20address = trc20Address?.text.toString()
         if (address.isNotEmpty() && trc20address.isNotEmpty()) {
