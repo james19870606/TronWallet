@@ -78,4 +78,4 @@ tronweb?.trc20TokenTransfer(
 
 ## License
 
-TronWeb is released under the MIT license. [See LICENSE](https://github.com/james19870606/TronWallet/LICENSE) for details.
+TronWeb is released under the MIT license. [See LICENSE](https://github.com/james19870606/TronWallet/blob/master/LICENSE) for details.
