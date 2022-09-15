@@ -23,7 +23,7 @@ dependencies {
 }
 ```
 
-##### Setup TronWeb
+##### Setup TronWeb 
 ```kotlin
 val onCompleted = {result : Boolean ->
     println("onCompleted------->>>>>")
