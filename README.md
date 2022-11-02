@@ -2,7 +2,7 @@
 **TronWallet** is an Android toolbelt for interaction with the Tron network.
 
 ![language](https://img.shields.io/badge/Language-Kotlin-green)
-[![CocoaPods](https://img.shields.io/badge/support-jitpack-green)](https://www.swift.org/getting-started/#using-the-package-manager)
+[![jitpack](https://img.shields.io/badge/support-jitpack-green)]
 
 ![](Resource/DemoImage0.jpeg)
 
@@ -19,7 +19,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.james19870606:TronWallet:1.0.2'
+    implementation 'com.github.james19870606:TronWallet:1.0.3'
 }
 ```
 
