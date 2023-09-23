@@ -161,6 +161,62 @@ public class TronWeb(context: Context, _webView: WebView) {
             }
         })
     }
+    public fun createRandom(onCompleted: (Boolean, String,String,String,String,String) -> Unit ){
+        val data = java.util.HashMap<String, Any>()
+        bridge.call("createRandom", data, object : Callback {
+            override fun call(map: HashMap<String, Any>?){
+                if (showLog) {
+                    println(map)
+                }
+                map?.let {
+                    val state = it["state"] as Boolean
+                    val address = it["address"] as String
+                    val mnemonic = it["mnemonic"] as String
+                    val privateKey = it["privateKey"] as String
+                    val publicKey = it["publicKey"] as String
+                    val error = it["error"] as String
+                    onCompleted(state, address, privateKey, publicKey, mnemonic, error)
+                }
+            }
+        })
+    }
+
+    public fun createAccount(onCompleted: (Boolean, String,String,String,String,String) -> Unit) {
+        val data = HashMap<String, Any>()
+        bridge.call("createAccount", data, object : Callback {
+            override fun call(map: HashMap<String, Any>?) {
+                map?.let {
+                    val state = it["state"] as Boolean
+                    val base58Address = it["base58Address"] as String
+                    val hexAddress = it["hexAddress"] as String
+                    val privateKey = it["privateKey"] as String
+                    val publicKey = it["publicKey"] as String
+                    val error = it["error"] as String
+                    onCompleted(state, hexAddress,base58Address, privateKey, publicKey, error)
+                }
+            }
+        })
+    }
+    public fun importAccountFromMnemonic(mnemonic: String, onCompleted: (Boolean, String, String, String, String) -> Unit) {
+        val data = HashMap<String, Any>()
+        data["mnemonic"] = mnemonic
+        bridge.call("importAccountFromMnemonic", data, object : Callback {
+            override fun call(map: HashMap<String, Any>?) {
+                if (showLog) {
+                    println(map)
+                }
+                map?.let {
+                    val state = it["state"] as Boolean
+                    val address = it["address"] as String
+                    val privateKey = it["privateKey"] as String
+                    val publicKey = it["publicKey"] as String
+                    val error = it["error"] as String
+                    onCompleted(state, address, privateKey, publicKey, error)
+                }
+            }
+        })
+    }
+
     public fun tronWebResetPrivateKey(newPrivateKey: String, onCompleted: (Boolean) -> Unit ){
         val data = java.util.HashMap<String, Any>()
         data["privateKey"] = newPrivateKey

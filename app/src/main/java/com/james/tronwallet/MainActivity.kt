@@ -19,8 +19,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun initData(): ArrayList<TestData> {
         val listData = ArrayList<TestData>()
-        listData.add(TestData("MAIN","trxTransfer","trc20Transfer","getTRC20TokenBalance","getTRXBalance","getAccount","resetTronWebPrivateKey"))
-        listData.add(TestData("NILE","trxTransfer","trc20Transfer","getTRC20TokenBalance","getTRXBalance","getAccount","resetTronWebPrivateKey"))
+        val testData = TestData(
+            "MAIN",
+            "trxTransfer",
+            "trc20Transfer",
+            "getTRC20TokenBalance",
+            "getTRXBalance",
+            "getAccount",
+            "resetTronWebPrivateKey",
+            "createRandom",
+            "CreateAccount",
+            "ImportAccountFromMnemonic")
+        listData.add(testData)
+        listData.add(testData)
         return listData
     }
     private fun setSimpleAdapter(listData: ArrayList<TestData>){
@@ -28,6 +39,15 @@ class MainActivity : AppCompatActivity() {
         testAdapter.lambda = { position: Int ,action: String ->
             var intent: Intent?  = null
             intent = when (action) {
+                "createRandom" -> {
+                    Intent(this@MainActivity, CreateRandomActivity::class.java)
+                }
+                "CreateAccount" -> {
+                    Intent(this@MainActivity, CreateAccountActivity::class.java)
+                }
+                "ImportAccountFromMnemonic" -> {
+                    Intent(this@MainActivity, ImportAccountFromMnemonicActivity::class.java)
+                }
                 "trxTransfer","trc20Transfer" -> {
                     Intent(this@MainActivity, TransferActivity::class.java)
                 }

@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.james.tronwallet">
-    <uses-permission android:name="android.permission.INTERNET">
-    </uses-permission>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TronWallet"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -23,14 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".TransferActivity"/>
-        <activity
-            android:name=".GetAccountActivity"/>
-        <activity
-            android:name=".GetBalanceActivity"/>
-        <activity
-            android:name=".ResetTronWebPrivateKeyActivity"/>
+        <activity android:name=".TransferActivity" />
+        <activity android:name=".GetAccountActivity" />
+        <activity android:name=".GetBalanceActivity" />
+        <activity android:name=".ResetTronWebPrivateKeyActivity" />
+        <activity android:name=".CreateAccountActivity" />
+        <activity android:name=".ImportAccountFromMnemonicActivity" />
+        <activity android:name=".CreateRandomActivity" />
+
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
 </manifest>

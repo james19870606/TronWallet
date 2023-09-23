@@ -13,6 +13,9 @@ class TestViewHolder1(itemView: View): RecyclerView.ViewHolder(itemView) {
     var btnTest3: Button? = null
     var btnTest4: Button? = null
     var btnTest5: Button? = null
+    var btnTest6: Button? = null
+    var btnTest7: Button? = null
+    var btnTest8: Button? = null
 
     init {
         textView = itemView.findViewById(R.id.text_item_test)
@@ -22,6 +25,9 @@ class TestViewHolder1(itemView: View): RecyclerView.ViewHolder(itemView) {
         btnTest3 = itemView.findViewById(R.id.btn_item_test3)
         btnTest4 = itemView.findViewById(R.id.btn_item_test4)
         btnTest5 = itemView.findViewById(R.id.btn_item_test5)
+        btnTest6 = itemView.findViewById(R.id.btn_item_test6)
+        btnTest7 = itemView.findViewById(R.id.btn_item_test7)
+        btnTest8 = itemView.findViewById(R.id.btn_item_test8)
 
     }
 }
