@@ -4,9 +4,7 @@
 ![language](https://img.shields.io/badge/Language-Kotlin-green)
 [![jitpack](https://img.shields.io/badge/support-jitpack-green)]
 
-![](Resource/DemoImage0.jpeg)
-
-波场私钥、助记词、Keystore的生成，推荐使用 [TrustWalletCore](https://github.com/trustwallet/wallet-core)
+![](Resource/DemoImage0.png)
 
 For more specific usage, please refer to the [demo](https://github.com/james19870606/TronWallet/tree/master/app)
 
@@ -19,15 +17,14 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.james19870606:TronWallet:1.0.3'
+    implementation 'com.github.james19870606:TronWallet:1.0.4'
 }
 ```
 
 ##### Setup TronWeb 
 ```kotlin
 val onCompleted = {result : Boolean ->
-    println("onCompleted------->>>>>")
-    println(result)
+  
     if (action == "trxTransfer") trxTransfer() else trc20Transfer()
 }
 val privateKey = privateKeyEditText?.text.toString()

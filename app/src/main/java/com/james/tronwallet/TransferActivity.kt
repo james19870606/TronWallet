@@ -80,16 +80,15 @@ class TransferActivity : AppCompatActivity() {
         val toAddress = receiveEditText?.text.toString()
         val amount = amountEditText?.text.toString()
         if (toAddress.isNotEmpty() && amount.isNotEmpty() && remark.isNotEmpty()) {
-            val onCompleted = {result : Boolean, txid: String ->
-
+            val onCompleted = {state : Boolean, txid: String ,error:String->
                 this.runOnUiThread {
-                    hashValue?.text = txid
+                    if (state){
+                        hashValue?.text = txid
+                    } else {
+                        hashValue?.text = error
+                    }
                 }
             }
-//            tronweb?.trxTransferWithRemark(remark,
-//                toAddress ,
-//                amount ,
-//                onCompleted = onCompleted)
             tronweb?.trxTransferWithOutRemark(
                 toAddress ,
                 amount ,
@@ -101,9 +100,13 @@ class TransferActivity : AppCompatActivity() {
         val toAddress = receiveEditText?.text.toString()
         val trc20ContractAddress = trc20EditText?.text.toString()
         val amount = amountEditText?.text.toString()
-        val onCompleted = {result : Boolean, txid: String ->
+        val onCompleted = {state : Boolean, txid: String,error:String ->
             this.runOnUiThread {
-                hashValue?.text = txid
+                if (state){
+                    hashValue?.text = txid
+                } else {
+                    hashValue?.text = error
+                }
             }
         }
         tronweb?.trc20TokenTransfer(

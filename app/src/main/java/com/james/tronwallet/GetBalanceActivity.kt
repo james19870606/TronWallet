@@ -56,25 +56,34 @@ class GetBalanceActivity : AppCompatActivity() {
     private fun getTRXBalance() {
         val address = address?.text.toString()
         if (address.isNotEmpty()) {
-            val onCompleted = {result : Boolean, amount: String ->
+            val onCompleted = {state : Boolean, amount: String ,error:String->
                 this.runOnUiThread {
-                    val  titleTip = if(position == 0) "主網餘額：" else "Nile測試網餘額： "
-                    balance?.text = titleTip + amount
+                    if (state) {
+                        val titleTip = if(position == 0) "主網餘額：" else "Nile測試網餘額： "
+                        balance?.text = titleTip + amount
+                    } else {
+                        balance?.text = error
+                    }
                 }
             }
-            tronweb?.getRTXBalance(
+            tronweb?.getTRXBalance(
                 address ,
                 onCompleted = onCompleted)
         }
     }
+    @SuppressLint("SetTextI18n")
     private fun getTRC20Balance() {
         val address = address?.text.toString()
         val trc20address = trc20Address?.text.toString()
         if (address.isNotEmpty() && trc20address.isNotEmpty()) {
-            val onCompleted = {result : Boolean, amount: String ->
+            val onCompleted = {state : Boolean, amount: String,error:String ->
                 this.runOnUiThread {
-                    val  titleTip = if(position == 0) "主網餘額：" else "Nile測試網餘額： "
-                    balance?.text = titleTip + amount
+                    if (state) {
+                        val titleTip = if(position == 0) "主網餘額：" else "Nile測試網餘額： "
+                        balance?.text = titleTip + amount
+                    } else {
+                        balance?.text = error
+                    }
                 }
             }
             tronweb?.getTRC20TokenBalance(

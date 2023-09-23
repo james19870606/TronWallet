@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initData(): ArrayList<TestData> {
         val listData = ArrayList<TestData>()
-        val testData = TestData(
+        val mainData = TestData(
             "MAIN",
             "trxTransfer",
             "trc20Transfer",
@@ -30,8 +30,19 @@ class MainActivity : AppCompatActivity() {
             "createRandom",
             "CreateAccount",
             "ImportAccountFromMnemonic")
-        listData.add(testData)
-        listData.add(testData)
+        val nileData = TestData(
+            "Nile",
+            "trxTransfer",
+            "trc20Transfer",
+            "getTRC20TokenBalance",
+            "getTRXBalance",
+            "getAccount",
+            "resetTronWebPrivateKey",
+            "createRandom",
+            "CreateAccount",
+            "ImportAccountFromMnemonic")
+        listData.add(mainData)
+        listData.add(nileData)
         return listData
     }
     private fun setSimpleAdapter(listData: ArrayList<TestData>){

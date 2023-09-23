@@ -61,7 +61,7 @@ public class TronWeb(context: Context, _webView: WebView) {
     }
     public fun trxTransferWithRemark(remark: String,
                                      toAddress: String,
-                                     amount: String,onCompleted: (Boolean,String) -> Unit) {
+                                     amount: String,onCompleted: (Boolean,String,String) -> Unit) {
         val data = java.util.HashMap<String, Any>()
         data["remark"] = remark
         data["toAddress"] = toAddress
@@ -72,13 +72,18 @@ public class TronWeb(context: Context, _webView: WebView) {
                     println(map)
                 }
                 val state =  map!!["result"] as Boolean
-                val txid = if (!state) "error" else  map["txid"] as String
-                onCompleted(state,txid)
+                if (state){
+                    val txid = map["txid"] as String
+                    onCompleted(state,txid,"")
+                } else {
+                    val error = map["error"] as String
+                    onCompleted(state,"",error)
+                }
             }
         })
     }
     public fun trxTransferWithOutRemark(toAddress: String,
-                                        amount: String,onCompleted: (Boolean,String) -> Unit) {
+                                        amount: String,onCompleted: (Boolean,String,String) -> Unit) {
         val data = java.util.HashMap<String, Any>()
         data["toAddress"] = toAddress
         data["amount"] = amount
@@ -88,8 +93,13 @@ public class TronWeb(context: Context, _webView: WebView) {
                     println(map)
                 }
                 val state =  map!!["result"] as Boolean
-                val txid = if (!state) "error" else  map["txid"] as String
-                onCompleted(state,txid)
+                if (state){
+                    val txid = map["txid"] as String
+                    onCompleted(state,txid,"")
+                } else {
+                    val error = map["error"] as String
+                    onCompleted(state,"",error)
+                }
             }
         })
     }
@@ -97,7 +107,7 @@ public class TronWeb(context: Context, _webView: WebView) {
                                   trc20ContractAddress: String,
                                   amount: String,
                                   remark: String,
-                                  feeLimit: String = "100000000",onCompleted: (Boolean,String) -> Unit) {
+                                  feeLimit: String = "100000000",onCompleted: (Boolean,String,String) -> Unit) {
         val data = java.util.HashMap<String, Any>()
         data["toAddress"] = toAddress
         data["amount"] = amount
@@ -111,12 +121,17 @@ public class TronWeb(context: Context, _webView: WebView) {
                     println(map)
                 }
                 val state =  map!!["result"] as Boolean
-                val txid = if (!state) "error" else  map["txid"] as String
-                onCompleted(state,txid)
+                if (state){
+                    val txid = map["txid"] as String
+                    onCompleted(state,txid,"")
+                } else {
+                    val error = map["error"] as String
+                    onCompleted(state,"",error)
+                }
             }
         })
     }
-    public fun getRTXBalance(address: String, onCompleted: (Boolean, String) -> Unit ){
+    public fun getTRXBalance(address: String, onCompleted: (Boolean, String,String) -> Unit ){
         val data = java.util.HashMap<String, Any>()
         data["address"] = address
         bridge.call("getTRXBalance", data, object : Callback {
@@ -125,15 +140,20 @@ public class TronWeb(context: Context, _webView: WebView) {
                     println(map)
                 }
                 val state =  map!!["state"] as Boolean
-                val balance = if (!state) "error" else  map["result"] as String
-                onCompleted(state,balance)
+                if (state) {
+                    val balance =  map["result"] as String
+                    onCompleted(state,balance,"")
+                } else {
+                    val error =  map["error"] as String
+                    onCompleted(false,"",error)
+                }
             }
         })
     }
     public fun getTRC20TokenBalance(address: String,
                                     trc20ContractAddress: String,
                                     decimalPoints: Double,
-                                    onCompleted: (Boolean, String) -> Unit ){
+                                    onCompleted: (Boolean, String,String) -> Unit ){
         val data = java.util.HashMap<String, Any>()
         data["address"] = address
         data["trc20ContractAddress"] = trc20ContractAddress
@@ -144,8 +164,13 @@ public class TronWeb(context: Context, _webView: WebView) {
                     println(map)
                 }
                 val state =  map!!["state"] as Boolean
-                val balance = if (!state) "error" else map["result"] as String
-                onCompleted(state,balance)
+                if (state) {
+                    val balance =  map["result"] as String
+                    onCompleted(state,balance,"")
+                } else {
+                    val error =  map["error"] as String
+                    onCompleted(false,"",error)
+                }
             }
         })
     }
