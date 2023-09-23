@@ -17,33 +17,90 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.james19870606:TronWallet:1.0.4'
+    implementation 'com.github.james19870606:TronWallet:1.0.5'
 }
 ```
 
 ##### Setup TronWeb 
 ```kotlin
 val onCompleted = {result : Boolean ->
-  
-    if (action == "trxTransfer") trxTransfer() else trc20Transfer()
+   //......
 }
-val privateKey = privateKeyEditText?.text.toString()
+val privateKey = ""
+
 val node = if(position == 0) TRONMainNet else TRONNileNet
+
 if (tronweb?.isGenerateTronWebInstanceSuccess == false) {
-tronweb?.setup(true, privateKey, node = node,onCompleted = onCompleted)
+
+  tronweb?.setup(true, privateKey, node = node,onCompleted = onCompleted)
+
 } else  {
-if (action == "trxTransfer") trxTransfer() else  trc20Transfer()
+
 }
 ```
+##### Create Random
+```Kotlin
+val onCompleted = {state: Boolean, address: String, privateKey: String, publicKey: String, mnemonic: String, error: String ->
+       runOnUiThread {
+        val text = """
+            address: $address
 
+            mnemonic: $mnemonic
+
+            privateKey: $privateKey
+
+            publicKey: $publicKey
+        """
+        walletDetail?.setText(if (state) text else error)
+    }    
+  }
+tronweb?.createRandom(onCompleted = onCompleted)
+```
+
+##### Create Account
+```Kotlin
+val onCompleted = { state: Boolean, hexAddress: String, base58Address: String, privateKey: String, publicKey: String, error: String ->
+  runOnUiThread {
+            val text = """
+                hexAddress: $hexAddress
+    
+                base58Address: $base58Address
+    
+                privateKey: $privateKey
+    
+                publicKey: $publicKey
+            """
+            walletDetail?.setText(if (state) text else error)
+     }
+}
+tronweb?.createAccount(onCompleted = onCompleted)
+```
+##### Import Account From Mnemonic
+```Kotlin
+val mnemonic = mnemonicEditText?.getText().toString();
+val onCompleted = { state: Boolean, address: String, privateKey: String, publicKey: String, error: String ->
+     runOnUiThread {
+            val text = """
+                address: $address
+    
+                privateKey: $privateKey
+    
+                publicKey: $publicKey
+            """
+            walletDetail?.setText(if (state) text else error)
+        }
+}
+tronweb?.importAccountFromMnemonic(mnemonic, onCompleted = onCompleted)
+```
 ##### Send TRX
 ```Kotlin
-val remark = ""
-val toAddress = ""
-val amount = ""
-val onCompleted = {result : Boolean, txid: String ->
+val onCompleted = {state : Boolean, txid: String ,error:String->
     this.runOnUiThread {
-        println(txid)
+        if (state){
+            hashValue?.text = txid
+        } else {
+            hashValue?.text = error
+        }
     }
 }
 tronweb?.trxTransferWithOutRemark(
@@ -54,13 +111,13 @@ tronweb?.trxTransferWithOutRemark(
 ```
 ##### Send TRC20
 ```Kotlin
-val remark = ""
-val toAddress = ""
-val trc20ContractAddress = ""
-val amount = ""
-val onCompleted = {result : Boolean, txid: String ->
+val onCompleted = {state : Boolean, txid: String,error:String ->
     this.runOnUiThread {
-         println(txid)
+        if (state){
+            hashValue?.text = txid
+        } else {
+            hashValue?.text = error
+        }
     }
 }
 tronweb?.trc20TokenTransfer(
