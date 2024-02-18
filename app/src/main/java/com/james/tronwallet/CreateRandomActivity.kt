@@ -30,10 +30,14 @@ class CreateRandomActivity: AppCompatActivity()  {
         }
     }
     private fun createRandom() {
-        val onCompleted = {result : Boolean ->
-            println("onCompleted------->>>>>")
-            println(result)
-            createRandomAction()
+        val onCompleted = {result : Boolean,error:String ->
+            if (result){
+                println("onCompleted------->>>>>")
+                println(result)
+                createRandomAction()
+            } else {
+                println(error)
+            }
         }
         if (tronweb?.isGenerateTronWebInstanceSuccess == false) {
             tronweb?.setup(true, "01",onCompleted = onCompleted)

@@ -15,12 +15,12 @@ public class TronWeb(context: Context, _webView: WebView) {
     private val webView = _webView
     var isGenerateTronWebInstanceSuccess: Boolean = false
     private var bridge = WebViewJavascriptBridge(_context = context,_webView = webView)
-    var onCompleted = { _: Boolean  -> }
+    var onCompleted = { _: Boolean,error:String  -> }
     private var showLog: Boolean = false
     init {
         setAllowUniversalAccessFromFileURLs(webView)
     }
-    public fun setup(showLog: Boolean = true, privateKey: String, apiKey: String = TRONApiKey, node: String = TRONNileNet, onCompleted: (Boolean) -> Unit) {
+    public fun setup(showLog: Boolean = true, privateKey: String, apiKey: String = TRONApiKey, node: String = TRONNileNet, onCompleted: (Boolean,String) -> Unit) {
         this.showLog = showLog
         this.onCompleted = onCompleted
         webView.webViewClient = webClient
@@ -48,13 +48,14 @@ public class TronWeb(context: Context, _webView: WebView) {
         data["apiKey"] = apiKey
         bridge.call("generateTronWebInstance", data, object : Callback {
             override fun call(map: HashMap<String, Any>?){
-                val result =  map!!["result"] as String
-                if (result == "1") {
+                val state =  map!!["state"] as Boolean
+                val error =  map["error"] as String
+                if (state) {
                     isGenerateTronWebInstanceSuccess = true
-                    onCompleted(true)
-                } else {
+                    onCompleted(true,"")
+                }  else {
                     isGenerateTronWebInstanceSuccess = false
-                    onCompleted(false)
+                    onCompleted(false,error)
                 }
             }
         })
@@ -71,13 +72,22 @@ public class TronWeb(context: Context, _webView: WebView) {
                 if (showLog) {
                     println(map)
                 }
-                val state =  map!!["result"] as Boolean
-                if (state){
+                var state =  map!!["result"]
+                if (state == null) {
+                    state = false
+                }
+                if (state as Boolean){
                     val txid = map["txid"] as String
                     onCompleted(state,txid,"")
                 } else {
-                    val error = map["error"] as String
-                    onCompleted(state,"",error)
+                    val code =  map!!["code"]
+                    if (code == null){
+                        val error = map["error"] as String
+                        onCompleted(false,"",error)
+                    } else {
+                        val txid = map["txid"] as String
+                        onCompleted(false,txid,code as String)
+                    }
                 }
             }
         })
@@ -92,13 +102,22 @@ public class TronWeb(context: Context, _webView: WebView) {
                 if (showLog) {
                     println(map)
                 }
-                val state =  map!!["result"] as Boolean
-                if (state){
+                var state =  map!!["result"]
+                if (state == null) {
+                    state = false
+                }
+                if (state as Boolean){
                     val txid = map["txid"] as String
                     onCompleted(state,txid,"")
                 } else {
-                    val error = map["error"] as String
-                    onCompleted(state,"",error)
+                    val code =  map!!["code"]
+                    if (code == null){
+                        val error = map["error"] as String
+                        onCompleted(false,"",error)
+                    } else {
+                        val txid = map["txid"] as String
+                        onCompleted(false,txid,code as String)
+                    }
                 }
             }
         })
@@ -120,13 +139,22 @@ public class TronWeb(context: Context, _webView: WebView) {
                 if (showLog) {
                     println(map)
                 }
-                val state =  map!!["result"] as Boolean
-                if (state){
+                var state =  map!!["result"]
+                if (state == null) {
+                    state = false
+                }
+                if (state as Boolean){
                     val txid = map["txid"] as String
                     onCompleted(state,txid,"")
                 } else {
-                    val error = map["error"] as String
-                    onCompleted(state,"",error)
+                    val code =  map!!["code"]
+                    if (code == null){
+                        val error = map["error"] as String
+                        onCompleted(false,"",error)
+                    } else {
+                        val txid = map["txid"] as String
+                        onCompleted(false,txid,code as String)
+                    }
                 }
             }
         })
@@ -210,6 +238,9 @@ public class TronWeb(context: Context, _webView: WebView) {
         val data = HashMap<String, Any>()
         bridge.call("createAccount", data, object : Callback {
             override fun call(map: HashMap<String, Any>?) {
+                if (showLog) {
+                    println(map)
+                }
                 map?.let {
                     val state = it["state"] as Boolean
                     val base58Address = it["base58Address"] as String

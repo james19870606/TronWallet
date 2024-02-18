@@ -62,10 +62,14 @@ class TransferActivity : AppCompatActivity() {
         }
     }
     private fun transfer(){
-        val onCompleted = {result : Boolean ->
-            println("onCompleted------->>>>>")
-            println(result)
-            if (action == "trxTransfer") trxTransfer() else trc20Transfer()
+        val onCompleted = {result : Boolean,error:String ->
+            if (result){
+                println("onCompleted------->>>>>")
+                println(result)
+                if (action == "trxTransfer") trxTransfer() else trc20Transfer()
+            } else {
+                println(error)
+            }
         }
         val privateKey = privateKeyEditText?.text.toString()
         val node = if(position == 0) TRONMainNet else TRONNileNet

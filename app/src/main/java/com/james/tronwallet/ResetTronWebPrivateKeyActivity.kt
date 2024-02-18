@@ -33,9 +33,13 @@ class ResetTronWebPrivateKeyActivity: AppCompatActivity() {
         }
     }
     private fun setupTronWeb(){
-        val onCompleted = {result : Boolean ->
-            println("onCompleted------->>>>>")
-            println(result)
+        val onCompleted = {result : Boolean,error:String ->
+            if (result){
+                println("onCompleted------->>>>>")
+                println(result)
+            } else {
+                println(error)
+            }
         }
         val privateKey = "01"
         tronweb?.setup(true, privateKey,onCompleted = onCompleted)

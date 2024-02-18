@@ -39,10 +39,14 @@ class GetBalanceActivity : AppCompatActivity() {
         }
     }
     private fun getBalance() {
-        val onCompleted = {result : Boolean ->
-            println("onCompleted------->>>>>")
-            println(result)
-            if (action == "getTRXBalance") getTRXBalance() else getTRC20Balance()
+        val onCompleted = {result : Boolean, error:String ->
+            if (result){
+                println("onCompleted------->>>>>")
+                println(result)
+                if (action == "getTRXBalance") getTRXBalance() else getTRC20Balance()
+            } else {
+                println(error)
+            }
         }
         val privateKey = "01"
         val node = if(position == 0) TRONMainNet else TRONNileNet

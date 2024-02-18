@@ -30,10 +30,14 @@ class CreateAccountActivity: AppCompatActivity()  {
         }
     }
     private fun createAccount() {
-        val onCompleted = {result : Boolean ->
-            println("onCompleted------->>>>>")
-            println(result)
-            createAccountAction()
+        val onCompleted = {result : Boolean,error:String ->
+            if (result){
+                println("onCompleted------->>>>>")
+                println(result)
+                createAccountAction()
+            }else{
+                println(error)
+            }
         }
         if (tronweb?.isGenerateTronWebInstanceSuccess == false) {
             tronweb?.setup(true, "01",onCompleted = onCompleted)

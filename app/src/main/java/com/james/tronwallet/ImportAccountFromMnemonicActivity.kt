@@ -33,10 +33,14 @@ class ImportAccountFromMnemonicActivity: AppCompatActivity() {
         }
     }
     private fun importAccountFromMnemonic() {
-        val onCompleted = {result : Boolean ->
-            println("onCompleted------->>>>>")
-            println(result)
-            importAccountFromMnemonicAction()
+        val onCompleted = {result : Boolean,error:String ->
+            if (result) {
+                println("onCompleted------->>>>>")
+                println(result)
+                importAccountFromMnemonicAction()
+            } else {
+                println(error)
+            }
         }
         if (tronweb?.isGenerateTronWebInstanceSuccess == false) {
             tronweb?.setup(true, "01",onCompleted = onCompleted)
