@@ -17,13 +17,13 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.james19870606:TronWallet:1.0.6'
+    implementation 'com.github.james19870606:TronWallet:1.0.7'
 }
 ```
 
 ##### Setup TronWeb 
 ```kotlin
-val onCompleted = {result : Boolean ->
+val onCompleted = {result : Boolean,error : String ->
    //......
 }
 val privateKey = ""
