@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <WebView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/webView"/>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="轉帳手續費預估页面"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/private_key"
+        android:hint="私钥输入框"
+        android:text="48bc5cf8d36b8747f109a975ddf46dc4642cc286889b3969f500feb9e41d3c4b"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/receive_address"
+        android:hint="收款地址輸入框"
+        android:text="TVpdGyTuzZYXHRAjhhBFabFMU1xFnfmYKj"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/amount"
+        android:hint="金額輸入框"
+        android:text="1"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/trc20Address"
+        android:hint="請輸入trc20合約地址"
+        android:text="TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj"/>
+
+    <TextView
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:id="@+id/hashValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="手續費預估值..."/>
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:text="轉帳手續費預估"
+        android:textAllCaps="false"
+        android:id="@+id/btn_transfer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

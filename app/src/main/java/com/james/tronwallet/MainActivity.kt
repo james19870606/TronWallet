@@ -29,7 +29,9 @@ class MainActivity : AppCompatActivity() {
             "resetTronWebPrivateKey",
             "createRandom",
             "CreateAccount",
-            "ImportAccountFromMnemonic")
+            "ImportAccountFromMnemonic",
+            "getAccountResource",
+            "getChainParameters","FeeEstimate")
         val nileData = TestData(
             "Nile",
             "trxTransfer",
@@ -40,7 +42,9 @@ class MainActivity : AppCompatActivity() {
             "resetTronWebPrivateKey",
             "createRandom",
             "CreateAccount",
-            "ImportAccountFromMnemonic")
+            "ImportAccountFromMnemonic",
+            "getAccountResource",
+            "getChainParameters","FeeEstimate")
         listData.add(mainData)
         listData.add(nileData)
         return listData
@@ -67,6 +71,15 @@ class MainActivity : AppCompatActivity() {
                 }
                 "getAccount" -> {
                     Intent(this@MainActivity, GetAccountActivity::class.java)
+                }
+                "getAccountResource" -> {
+                    Intent(this@MainActivity, GetAccountResourceActivity::class.java)
+                }
+                "getChainParameters" -> {
+                    Intent(this@MainActivity, GetChainParametersActivity::class.java)
+                }
+                "FeeEstimate" -> {
+                    Intent(this@MainActivity, FeeEstimateActivity::class.java)
                 }
                 else -> {
                     Intent(this@MainActivity, ResetTronWebPrivateKeyActivity::class.java)

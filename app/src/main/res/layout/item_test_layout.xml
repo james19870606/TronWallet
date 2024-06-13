@@ -64,5 +64,23 @@
         android:id="@+id/btn_item_test8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    <Button
+        android:text="测试"
+        android:textAllCaps="false"
+        android:id="@+id/btn_item_test9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:text="测试"
+        android:textAllCaps="false"
+        android:id="@+id/btn_item_test10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:text="测试"
+        android:textAllCaps="false"
+        android:id="@+id/btn_item_test11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

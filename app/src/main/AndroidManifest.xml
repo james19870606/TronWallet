@@ -30,6 +30,10 @@
         <activity android:name=".CreateAccountActivity" />
         <activity android:name=".ImportAccountFromMnemonicActivity" />
         <activity android:name=".CreateRandomActivity" />
+        <activity android:name=".GetAccountResourceActivity" />
+        <activity android:name=".GetChainParametersActivity" />
+        <activity android:name=".FeeEstimateActivity" />
+
 
     </application>
 

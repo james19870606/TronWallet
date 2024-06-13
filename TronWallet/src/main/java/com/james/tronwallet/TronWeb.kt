@@ -202,10 +202,61 @@ public class TronWeb(context: Context, _webView: WebView) {
             }
         })
     }
+    //  trc20代幣轉帳estimateEnergy
+    public fun getFeeEstimate(url:String,
+                              toAddress: String,
+                                    trc20ContractAddress: String,
+                              amount: String,
+                              onCompleted: (Boolean,Double,Double,String) -> Unit ){
+        val data = java.util.HashMap<String, Any>()
+        data["toAddress"] = toAddress
+        data["url"] = url
+        data["contractAddress"] = trc20ContractAddress
+        data["amount"] = amount
+        bridge.call("estimateEnergy", data, object : Callback {
+            override fun call(map: HashMap<String, Any>?){
+                if (showLog) {
+                    println(map)
+                }
+                val state =  map!!["state"] as Boolean
+                if (state) {
+                    val energyUsed =  map["energy_used"] as Double
+                    val energyFee =  map["energyFee"] as Double
+                    onCompleted(state,energyUsed,energyFee,"")
+                } else {
+                    val error =  map["error"] as String
+                    onCompleted(false,0.0,0.0,error)
+                }
+            }
+        })
+    }
     public fun getAccount(address: String, onCompleted: (HashMap<String, Any>) -> Unit ){
         val data = java.util.HashMap<String, Any>()
         data["address"] = address
         bridge.call("getAccount", data, object : Callback {
+            override fun call(map: HashMap<String, Any>?){
+                if (showLog) {
+                    println(map)
+                }
+                onCompleted(map ?: HashMap<String, Any>())
+            }
+        })
+    }
+    public fun getAccountResource(address: String, onCompleted: (HashMap<String, Any>) -> Unit ){
+        val data = java.util.HashMap<String, Any>()
+        data["address"] = address
+        bridge.call("getAccountResources", data, object : Callback {
+            override fun call(map: HashMap<String, Any>?){
+                if (showLog) {
+                    println(map)
+                }
+                onCompleted(map ?: HashMap<String, Any>())
+            }
+        })
+    }
+    public fun getChainParameters(onCompleted: (HashMap<String, Any>) -> Unit ){
+        val data = java.util.HashMap<String, Any>()
+        bridge.call("getChainParameters", data, object : Callback {
             override fun call(map: HashMap<String, Any>?){
                 if (showLog) {
                     println(map)
