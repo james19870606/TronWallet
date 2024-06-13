@@ -17,7 +17,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.james19870606:TronWallet:1.0.8'
+    implementation 'com.github.james19870606:TronWallet:1.0.9'
 }
 ```
 
