@@ -17,7 +17,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.james19870606:TronWallet:1.0.9'
+    implementation 'com.github.james19870606:TronWallet:1.1.0'
 }
 ```
 
@@ -127,7 +127,28 @@ tronweb?.trc20TokenTransfer(
     remark,
     onCompleted = onCompleted)
 ```
+##### Fee Estimate When Send TRX
+```Kotlin
+val toAddress = receiveEditText?.text.toString()
+val amount = amountEditText?.text.toString()
+val note = "Test data"
+val onCompleted = {state : Boolean, sendAccountResources:LinkedTreeMap<String, Any>,feeDic:LinkedTreeMap<String, Any>,error:String ->
+    this.runOnUiThread {
+        if (state){
+            val activationFee = feeDic["activationFee"] as Double
+            val noteFee = feeDic["noteFee"] as Double
+            val requiredBandwidth = feeDic["requiredBandwidth"] as Double
+            val totalFee = activationFee + noteFee + requiredBandwidth / 1000
+            hashValue?.text =
+                "Resource Consumed  ${requiredBandwidth.toInt()} Bandwidth  \nFee    $totalFee TRX"
 
+        } else {
+            hashValue?.text = error
+        }
+    }
+}
+tronweb?.estimateTRXTransferFee(toAddress, note, amount, onCompleted)
+```
 ##### Fee Estimate When Send TRC20
 ```Kotlin
 val onCompleted = {state : Boolean, energyUsed:Double,energyFee:Double,error:String ->
