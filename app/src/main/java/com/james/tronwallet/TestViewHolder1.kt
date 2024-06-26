@@ -19,6 +19,7 @@ class TestViewHolder1(itemView: View): RecyclerView.ViewHolder(itemView) {
     var btnTest9: Button? = null
     var btnTest10: Button? = null
     var btnTest11: Button? = null
+    var btnTest12: Button? = null
 
     init {
         textView = itemView.findViewById(R.id.text_item_test)
@@ -34,7 +35,7 @@ class TestViewHolder1(itemView: View): RecyclerView.ViewHolder(itemView) {
         btnTest9 = itemView.findViewById(R.id.btn_item_test9)
         btnTest10 = itemView.findViewById(R.id.btn_item_test10)
         btnTest11 = itemView.findViewById(R.id.btn_item_test11)
-
+        btnTest12 = itemView.findViewById(R.id.btn_item_test12)
 
     }
 }

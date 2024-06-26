@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             "CreateAccount",
             "ImportAccountFromMnemonic",
             "getAccountResource",
-            "getChainParameters","FeeEstimate")
+            "getChainParameters","estimateTRC20TransferFee","estimateTRXTransferFee")
         val nileData = TestData(
             "Nile",
             "trxTransfer",
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             "CreateAccount",
             "ImportAccountFromMnemonic",
             "getAccountResource",
-            "getChainParameters","FeeEstimate")
+            "getChainParameters","estimateTRC20TransferFee","estimateTRXTransferFee")
         listData.add(mainData)
         listData.add(nileData)
         return listData
@@ -78,7 +78,10 @@ class MainActivity : AppCompatActivity() {
                 "getChainParameters" -> {
                     Intent(this@MainActivity, GetChainParametersActivity::class.java)
                 }
-                "FeeEstimate" -> {
+                "estimateTRC20TransferFee" -> {
+                    Intent(this@MainActivity, FeeEstimateActivity::class.java)
+                }
+                "estimateTRXTransferFee" -> {
                     Intent(this@MainActivity, FeeEstimateActivity::class.java)
                 }
                 else -> {

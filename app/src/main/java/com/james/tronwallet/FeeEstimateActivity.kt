@@ -9,6 +9,8 @@ import android.webkit.WebView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.google.gson.internal.LinkedTreeMap
+
 import androidx.appcompat.app.AppCompatActivity
 
 class FeeEstimateActivity : AppCompatActivity() {
@@ -61,9 +63,40 @@ class FeeEstimateActivity : AppCompatActivity() {
             getFeeEstimate()
         }
     }
+    private fun getFeeEstimate(){
+        if (action == "estimateTRXTransferFee") {
+            estimateTRXTransferFee()
+        } else {
+            estimateERC20TransferFee()
+        }
+    }
 
     @SuppressLint("SetTextI18n")
-    private fun getFeeEstimate(){
+    private fun estimateTRXTransferFee(){
+        val toAddress = receiveEditText?.text.toString()
+        val amount = amountEditText?.text.toString()
+        val note = "Test data"
+        val onCompleted = {state : Boolean, sendAccountResources:LinkedTreeMap<String, Any>,feeDic:LinkedTreeMap<String, Any>,error:String ->
+            this.runOnUiThread {
+                if (state){
+                    println("estimateTRXTransferFee-----");
+                    val activationFee = feeDic["activationFee"] as Double
+                    val noteFee = feeDic["noteFee"] as Double
+                    val requiredBandwidth = feeDic["requiredBandwidth"] as Double
+                    val totalFee = activationFee + noteFee + requiredBandwidth / 1000
+                    hashValue?.text =
+                        "Resource Consumed  ${requiredBandwidth.toInt()} Bandwidth  \nFee    $totalFee TRX"
+
+                } else {
+                    hashValue?.text = error
+                }
+            }
+        }
+        tronweb?.estimateTRXTransferFee(toAddress, note, amount, onCompleted)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun estimateERC20TransferFee(){
         val toAddress = receiveEditText?.text.toString()
         val trc20ContractAddress = trc20EditText?.text.toString()
         val amount = amountEditText?.text.toString()
@@ -97,6 +130,9 @@ class FeeEstimateActivity : AppCompatActivity() {
             title?.text = if (position == 0) "主網轉帳手續費預估" else "Nile測試網轉帳手續費預估"
             val trc20ContractAddress =  if (position == 0) "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t" else "TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj"
             trc20EditText?.setText(trc20ContractAddress)
+            if (action == "estimateTRXTransferFee") {
+                trc20EditText?.setVisibility(View.GONE)
+            }
         }
     }
 }

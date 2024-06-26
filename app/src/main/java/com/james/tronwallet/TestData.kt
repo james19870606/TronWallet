@@ -12,7 +12,8 @@ class TestData(_testMessage: String,
                _btnTest8: String,
                _btnTest9: String,
                _btnTest10: String,
-               _btnTest11: String) {
+               _btnTest11: String,
+               _btnTest12: String) {
     var testMessage: String = _testMessage
     var btnTest: String = _btnTest
     var btnTest1: String = _btnTest1
@@ -26,6 +27,8 @@ class TestData(_testMessage: String,
     var btnTest9: String = _btnTest9
     var btnTest10: String = _btnTest10
     var btnTest11: String = _btnTest11
+    var btnTest12: String = _btnTest12
+
 
 
 }

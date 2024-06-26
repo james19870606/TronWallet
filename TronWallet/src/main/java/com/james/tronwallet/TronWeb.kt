@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.google.gson.internal.LinkedTreeMap
 import java.lang.reflect.InvocationTargetException
 
 const val TRONMainNet: String = "https://api.trongrid.io"
@@ -226,6 +227,33 @@ public class TronWeb(context: Context, _webView: WebView) {
                 } else {
                     val error =  map["error"] as String
                     onCompleted(false,0.0,0.0,error)
+                }
+            }
+        })
+    }
+    // trx轉帳estimate Fee
+    public fun estimateTRXTransferFee(
+                              toAddress: String,
+                              note: String = "",
+                              amount: String,
+                              onCompleted: (Boolean,LinkedTreeMap<String, Any>,LinkedTreeMap<String, Any>,String) -> Unit ){
+        val data = java.util.HashMap<String, Any>()
+        data["toAddress"] = toAddress
+        data["note"] = note
+        data["amount"] = amount
+        bridge.call("estimateTRXFee", data, object : Callback {
+            override fun call(map: HashMap<String, Any>?){
+                if (showLog) {
+                    println(map)
+                }
+                val state =  map!!["state"] as Boolean
+                if (state) {
+                    val sendAccountResources =  map["sendAccountResources"] as LinkedTreeMap<String, Any>
+                    val feeDic =  map["result"] as LinkedTreeMap<String, Any>
+                    onCompleted(state,sendAccountResources,feeDic,"")
+                } else {
+                    val error =  map["error"] as String
+                    onCompleted(false,LinkedTreeMap<String, Any>(),LinkedTreeMap<String, Any>(),error)
                 }
             }
         })

@@ -32,6 +32,8 @@ class TestAdapter(arrayData: ArrayList<TestData>) : RecyclerView.Adapter<Recycle
             holder.btnTest9?.text = listData[position].btnTest9
             holder.btnTest10?.text = listData[position].btnTest10
             holder.btnTest11?.text = listData[position].btnTest11
+            holder.btnTest12?.text = listData[position].btnTest12
+
 
             holder.btnTest?.setOnClickListener{
                 this.lambda(position,listData[position].btnTest)
@@ -68,6 +70,9 @@ class TestAdapter(arrayData: ArrayList<TestData>) : RecyclerView.Adapter<Recycle
             }
             holder.btnTest11?.setOnClickListener{
                 this.lambda(position,listData[position].btnTest11)
+            }
+            holder.btnTest12?.setOnClickListener{
+                this.lambda(position,listData[position].btnTest12)
             }
         }
     }
