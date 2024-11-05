@@ -17,7 +17,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.james19870606:TronWallet:1.1.0'
+    implementation 'com.github.james19870606:TronWallet:1.1.1'
 }
 ```
 
@@ -91,6 +91,21 @@ val onCompleted = { state: Boolean, address: String, privateKey: String, publicK
         }
 }
 tronweb?.importAccountFromMnemonic(mnemonic, onCompleted = onCompleted)
+```
+##### Import Account From PrivateKey
+```Kotlin
+val privateKey = privateKeyEditText?.getText().toString();
+val onCompleted = { state: Boolean,base58: String, hex: String, error: String ->
+    runOnUiThread {
+    val text = """
+        base58: $base58
+
+        hex: $hex
+    """
+    walletDetail?.setText(if (state) text else error)
+}
+}
+tronweb?.importAccountFromPrivateKey(privateKey, onCompleted = onCompleted)
 ```
 ##### Send TRX
 ```Kotlin
