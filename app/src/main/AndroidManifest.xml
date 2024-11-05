@@ -33,8 +33,7 @@
         <activity android:name=".GetAccountResourceActivity" />
         <activity android:name=".GetChainParametersActivity" />
         <activity android:name=".FeeEstimateActivity" />
-
-
+        <activity android:name=".ImportAccountFromPrivateKeyActivity" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>

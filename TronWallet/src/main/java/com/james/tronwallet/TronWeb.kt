@@ -351,6 +351,24 @@ public class TronWeb(context: Context, _webView: WebView) {
             }
         })
     }
+    public fun importAccountFromPrivateKey(privateKey: String, onCompleted: (Boolean, String, String, String) -> Unit) {
+        val data = HashMap<String, Any>()
+        data["privateKey"] = privateKey
+        bridge.call("importAccountFromPrivateKey", data, object : Callback {
+            override fun call(map: HashMap<String, Any>?) {
+                if (showLog) {
+                    println(map)
+                }
+                map?.let {
+                    val state = it["state"] as Boolean
+                    val base58 = it["base58"] as String
+                    val hex = it["hex"] as String
+                    val error = it["error"] as String
+                    onCompleted(state, base58, hex, error)
+                }
+            }
+        })
+    }
 
     public fun tronWebResetPrivateKey(newPrivateKey: String, onCompleted: (Boolean) -> Unit ){
         val data = java.util.HashMap<String, Any>()

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <WebView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/webView"/>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Import Account From PrivateKey"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/private_key"
+        android:hint="private key input"
+        android:inputType="textMultiLine"
+        android:textSize="13sp"
+        android:text="3481E79956D4BD95F358AC96D151C976392FC4E3FC132F78A847906DE588C145"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/wallet_detail"
+        android:hint="waiting for import account"
+        android:inputType="textMultiLine"
+        android:textSize="13sp"
+        android:text=""/>
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:text="Import Account From PrivateKey"
+        android:textAllCaps="false"
+        android:id="@+id/btn_import_account_from_private_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
