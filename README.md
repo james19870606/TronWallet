@@ -190,4 +190,4 @@ tronweb?.getFeeEstimate(
 
 ## License
 
-TronWeb is released under the MIT license. [See LICENSE](https://github.com/james19870606/TronWallet/blob/master/LICENSE) for details.
+TronWeb is released under the MIT license. [See LICENSE](https://github.com/james19870606/TronWallet/blob/master/LICENSE) for details .
