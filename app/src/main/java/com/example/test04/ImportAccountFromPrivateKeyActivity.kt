@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 import android.os.Bundle
 import android.webkit.WebView
@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.james.tronwallet.TronWeb
 
 class ImportAccountFromPrivateKeyActivity: AppCompatActivity() {
     private var title: TextView? = null

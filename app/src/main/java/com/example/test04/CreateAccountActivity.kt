@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 import android.os.Bundle
 import android.webkit.WebView
@@ -6,57 +6,58 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.james.tronwallet.TronWeb
 
-class ImportAccountFromMnemonicActivity: AppCompatActivity() {
+class CreateAccountActivity: AppCompatActivity()  {
     private var title: TextView? = null
-
-    private var mnemonicEditText: EditText? = null
     private var walletDetail: EditText? = null
-    private var importAccountFromMnemonicBtn: Button? = null
+    private var createAccountBtn: Button? = null
     private var mWebView: WebView? = null
     private var tronweb:TronWeb? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.import_account_from_mnemonic)
+        setContentView(R.layout.create_account)
         setupContent()
     }
     private fun setupContent() {
         title = findViewById(R.id.title)
-        mnemonicEditText = findViewById(R.id.mnemonic)
         walletDetail = findViewById(R.id.wallet_detail)
-        importAccountFromMnemonicBtn = findViewById(R.id.btn_import_account_from_mnemonic)
+        createAccountBtn = findViewById(R.id.btn_create_Account)
         mWebView =  findViewById(R.id.webView)
         tronweb = TronWeb(this, _webView = mWebView!!)
-        importAccountFromMnemonicBtn?.setOnClickListener{
-            importAccountFromMnemonic()
+        createAccountBtn?.setOnClickListener{
+            createAccount()
         }
     }
-    private fun importAccountFromMnemonic() {
+    private fun createAccount() {
         val onCompleted = {result : Boolean,error:String ->
-            if (result) {
+            if (result){
                 println("onCompleted------->>>>>")
                 println(result)
-                importAccountFromMnemonicAction()
-            } else {
+                createAccountAction()
+            }else{
                 println(error)
             }
         }
         if (tronweb?.isGenerateTronWebInstanceSuccess == false) {
             tronweb?.setup(true, "01",onCompleted = onCompleted)
         }  else {
-            importAccountFromMnemonicAction()
+            createAccountAction()
         }
     }
 
     private fun updateWalletDetails(state: Boolean,
-                                    address: String,
+                                    hexAddress: String,
+                                    base58Address: String,
                                     privateKey: String,
                                     publicKey: String,
                                     error: String) {
         runOnUiThread {
             val text = """
-                address: $address
+                hexAddress: $hexAddress
+    
+                base58Address: $base58Address
     
                 privateKey: $privateKey
     
@@ -66,11 +67,10 @@ class ImportAccountFromMnemonicActivity: AppCompatActivity() {
         }
     }
 
-    private fun importAccountFromMnemonicAction() {
-        val mnemonic = mnemonicEditText?.getText().toString();
-        val onCompleted = { state: Boolean, address: String, privateKey: String, publicKey: String, error: String ->
-            updateWalletDetails(state, address, privateKey, publicKey, error)
+    private fun createAccountAction() {
+        val onCompleted = { state: Boolean, hexAddress: String, base58Address: String, privateKey: String, publicKey: String, error: String ->
+            updateWalletDetails(state, hexAddress, base58Address, privateKey, publicKey, error)
         }
-        tronweb?.importAccountFromMnemonic(mnemonic, onCompleted = onCompleted)
+        tronweb?.createAccount(onCompleted = onCompleted)
     }
 }

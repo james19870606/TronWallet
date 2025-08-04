@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 import android.view.View
 import android.widget.Button
@@ -21,6 +21,9 @@ class TestViewHolder1(itemView: View): RecyclerView.ViewHolder(itemView) {
     var btnTest11: Button? = null
     var btnTest12: Button? = null
     var btnTest13: Button? = null
+    var btnTest14: Button? = null
+    var btnTest15: Button? = null
+
 
     init {
         textView = itemView.findViewById(R.id.text_item_test)
@@ -38,6 +41,8 @@ class TestViewHolder1(itemView: View): RecyclerView.ViewHolder(itemView) {
         btnTest11 = itemView.findViewById(R.id.btn_item_test11)
         btnTest12 = itemView.findViewById(R.id.btn_item_test12)
         btnTest13 = itemView.findViewById(R.id.btn_item_test13)
+        btnTest14 = itemView.findViewById(R.id.btn_item_test14)
+        btnTest15 = itemView.findViewById(R.id.btn_item_test15)
 
     }
 }

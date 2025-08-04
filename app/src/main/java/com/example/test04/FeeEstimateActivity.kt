@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -12,7 +12,9 @@ import android.widget.TextView
 import com.google.gson.internal.LinkedTreeMap
 
 import androidx.appcompat.app.AppCompatActivity
-
+import com.james.tronwallet.TronWeb
+import com.james.tronwallet.TRONMainNet
+import com.james.tronwallet.TRONNileNet
 class FeeEstimateActivity : AppCompatActivity() {
     private var title: TextView? = null
     private var hashValue: TextView? = null

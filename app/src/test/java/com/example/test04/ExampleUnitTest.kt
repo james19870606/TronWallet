@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 import org.junit.Test
 

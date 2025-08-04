@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,7 +10,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
+import com.james.tronwallet.TronWeb
+import com.james.tronwallet.TRONMainNet
+import com.james.tronwallet.TRONNileNet
 class TransferActivity : AppCompatActivity() {
     private var title: TextView? = null
     private var hashValue: TextView? = null

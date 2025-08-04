@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,7 +8,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
+import com.james.tronwallet.TronWeb
+import com.james.tronwallet.TRONMainNet
+import com.james.tronwallet.TRONNileNet
 class GetBalanceActivity : AppCompatActivity() {
     private var title: TextView? = null
     private var balance: TextView? = null
@@ -104,7 +106,17 @@ class GetBalanceActivity : AppCompatActivity() {
             action = bundle.getString("action") ?: ""
             position = bundle.getInt("position") ?: 0
             println("this position:$position  action:$action")
-            title?.text = if (position == 0) "主網獲取餘額" else "Nile測試網獲取餘額"
+            var text = ""
+            var trc20ContractAddress = ""
+            if (position == 0) {
+                text = "主網獲取餘額"
+                trc20ContractAddress = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+            } else {
+                text = "Nile測試網獲取餘額"
+                trc20ContractAddress = "TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj"
+            }
+            title?.text = text
+            trc20Address?.setText(trc20ContractAddress)
             if (action == "getTRXBalance") {
                 trc20Address?.setVisibility(View.GONE)
             }

@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.james.tronwallet", appContext.packageName)
+        assertEquals("com.example.test04", appContext.packageName)
     }
 }

@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 class TestData(_testMessage: String,
                _btnTest: String,
@@ -14,7 +14,9 @@ class TestData(_testMessage: String,
                _btnTest10: String,
                _btnTest11: String,
                _btnTest12: String,
-               _btnTest13: String) {
+               _btnTest13: String,
+               _btnTest14: String,
+               _btnTest15: String) {
     var testMessage: String = _testMessage
     var btnTest: String = _btnTest
     var btnTest1: String = _btnTest1
@@ -30,8 +32,7 @@ class TestData(_testMessage: String,
     var btnTest11: String = _btnTest11
     var btnTest12: String = _btnTest12
     var btnTest13: String = _btnTest13
-
-
-
+    var btnTest14: String = _btnTest14
+    var btnTest15: String = _btnTest15
 
 }

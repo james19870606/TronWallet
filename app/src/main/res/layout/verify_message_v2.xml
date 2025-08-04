@@ -13,28 +13,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Nile測試網獲取帳戶資訊"/>
+        android:text="verify message v2"/>
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/address"
-        android:hint="査詢地址輸入框"
-        android:text="TQrY8tryqsYVCYS3MFbtffiPp2ccyn4STm"/>
+        android:id="@+id/signature"
+        android:hint="signature input"
+        android:inputType="textMultiLine"
+        android:textSize="13sp"
+        android:text="0x67ff16a2816564a239c6f5b8f7239b689b291fc88a48e1e538fc82f0c2f1b7f764ddbf24ac5ff92894309b98a6a6b891bae5a8860195dd22eca1cc136c56e4261c"/>
 
-    <TextView
+    <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/account_detail"
-        android:hint=""
-        android:textColor="@color/black"
-        android:text="等待查询地址详情"/>
+        android:id="@+id/verify_detail"
+        android:hint="waiting for verify"
+        android:inputType="textMultiLine"
+        android:textSize="13sp"
+        android:text=""/>
 
     <Button
         android:layout_marginTop="20dp"
-        android:text="帳戶査詢"
+        android:text="verify Message V2"
         android:textAllCaps="false"
-        android:id="@+id/btn_getBalance"
+        android:id="@+id/btn_verify_message_v2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

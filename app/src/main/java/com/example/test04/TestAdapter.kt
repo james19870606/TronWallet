@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +34,9 @@ class TestAdapter(arrayData: ArrayList<TestData>) : RecyclerView.Adapter<Recycle
             holder.btnTest11?.text = listData[position].btnTest11
             holder.btnTest12?.text = listData[position].btnTest12
             holder.btnTest13?.text = listData[position].btnTest13
+            holder.btnTest14?.text = listData[position].btnTest14
 
+            holder.btnTest15?.text = listData[position].btnTest15
 
 
             holder.btnTest?.setOnClickListener{
@@ -78,6 +80,12 @@ class TestAdapter(arrayData: ArrayList<TestData>) : RecyclerView.Adapter<Recycle
             }
             holder.btnTest13?.setOnClickListener{
                 this.lambda(position,listData[position].btnTest13)
+            }
+            holder.btnTest14?.setOnClickListener{
+                this.lambda(position,listData[position].btnTest14)
+            }
+            holder.btnTest15?.setOnClickListener{
+                this.lambda(position,listData[position].btnTest15)
             }
         }
     }

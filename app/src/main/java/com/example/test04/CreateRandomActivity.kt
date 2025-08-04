@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 import android.os.Bundle
 import android.webkit.WebView
@@ -6,57 +6,53 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.james.tronwallet.TronWeb
 
-class CreateAccountActivity: AppCompatActivity()  {
+class CreateRandomActivity: AppCompatActivity()  {
     private var title: TextView? = null
     private var walletDetail: EditText? = null
-    private var createAccountBtn: Button? = null
+    private var createRandomBtn: Button? = null
     private var mWebView: WebView? = null
     private var tronweb:TronWeb? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.create_account)
+        setContentView(R.layout.create_random)
         setupContent()
     }
     private fun setupContent() {
         title = findViewById(R.id.title)
         walletDetail = findViewById(R.id.wallet_detail)
-        createAccountBtn = findViewById(R.id.btn_create_Account)
+        createRandomBtn = findViewById(R.id.btn_create_random)
         mWebView =  findViewById(R.id.webView)
         tronweb = TronWeb(this, _webView = mWebView!!)
-        createAccountBtn?.setOnClickListener{
-            createAccount()
+        createRandomBtn?.setOnClickListener{
+            createRandom()
         }
     }
-    private fun createAccount() {
+    private fun createRandom() {
         val onCompleted = {result : Boolean,error:String ->
             if (result){
                 println("onCompleted------->>>>>")
                 println(result)
-                createAccountAction()
-            }else{
+                createRandomAction()
+            } else {
                 println(error)
             }
         }
         if (tronweb?.isGenerateTronWebInstanceSuccess == false) {
             tronweb?.setup(true, "01",onCompleted = onCompleted)
         }  else {
-            createAccountAction()
+            createRandomAction()
         }
     }
 
-    private fun updateWalletDetails(state: Boolean,
-                                    hexAddress: String,
-                                    base58Address: String,
-                                    privateKey: String,
-                                    publicKey: String,
-                                    error: String) {
+    private fun updateWalletDetails(state: Boolean, address: String, mnemonic: String, privateKey: String, publicKey: String, error: String) {
         runOnUiThread {
             val text = """
-                hexAddress: $hexAddress
+                address: $address
     
-                base58Address: $base58Address
+                mnemonic: $mnemonic
     
                 privateKey: $privateKey
     
@@ -66,10 +62,10 @@ class CreateAccountActivity: AppCompatActivity()  {
         }
     }
 
-    private fun createAccountAction() {
-        val onCompleted = { state: Boolean, hexAddress: String, base58Address: String, privateKey: String, publicKey: String, error: String ->
-            updateWalletDetails(state, hexAddress, base58Address, privateKey, publicKey, error)
+    private fun createRandomAction() {
+        val onCompleted = { state: Boolean, address: String, privateKey: String, publicKey: String, mnemonic: String, error: String ->
+            updateWalletDetails(state, address, mnemonic, privateKey, publicKey, error)
         }
-        tronweb?.createAccount(onCompleted = onCompleted)
+        tronweb?.createRandom(onCompleted = onCompleted)
     }
 }

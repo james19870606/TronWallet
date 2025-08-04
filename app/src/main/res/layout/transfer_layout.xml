@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/private_key"
         android:hint="私钥输入框"
-        android:text="48bc5cf8d36b8747f109a975ddf46dc4642cc286889b3969f500feb9e41d3c4b"/>
+        android:text="57f75d7325d8ba0e6882b4be7afb3bb36b34d184d3c58c28439a9b72cc597d86"/>
 
     <EditText
         android:layout_width="fill_parent"

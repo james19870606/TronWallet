@@ -1,11 +1,12 @@
-package com.james.tronwallet
+package com.example.test04
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
     private var listView: RecyclerView? = null
 
@@ -15,6 +16,8 @@ class MainActivity : AppCompatActivity() {
         listView = findViewById(R.id.list_main)
         val listData = initData()
         setSimpleAdapter(listData)
+        Log.d(TAG, "onCreate called111111111111111")
+
     }
 
     private fun initData(): ArrayList<TestData> {
@@ -34,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             "getChainParameters",
             "estimateTRC20TransferFee",
             "estimateTRXTransferFee",
-            "ImportAccountFromPrivateKey")
+            "ImportAccountFromPrivateKey","SignMessageV2",  "VerifyMessageV2")
         val nileData = TestData(
             "Nile",
             "trxTransfer",
@@ -50,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             "getChainParameters",
             "estimateTRC20TransferFee",
             "estimateTRXTransferFee",
-            "ImportAccountFromPrivateKey")
+            "ImportAccountFromPrivateKey","SignMessageV2",  "VerifyMessageV2")
         listData.add(mainData)
         listData.add(nileData)
         return listData
@@ -92,6 +95,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 "ImportAccountFromPrivateKey" -> {
                     Intent(this@MainActivity, ImportAccountFromPrivateKeyActivity::class.java)
+                }
+                "SignMessageV2" -> {
+                    Intent(this@MainActivity, SignMessageV2Activity::class.java)
+                }
+                "VerifyMessageV2" -> {
+                    Intent(this@MainActivity, VerifyMessageV2Activity::class.java)
                 }
                 else -> {
                     Intent(this@MainActivity, ResetTronWebPrivateKeyActivity::class.java)

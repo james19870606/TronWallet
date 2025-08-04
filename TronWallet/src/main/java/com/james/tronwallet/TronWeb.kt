@@ -369,6 +369,43 @@ public class TronWeb(context: Context, _webView: WebView) {
             }
         })
     }
+    public fun signMessageV2(message: String,privateKey: String, onCompleted: (Boolean, String, String) -> Unit) {
+        val data = HashMap<String, Any>()
+        data["message"] = message
+        data["privateKey"] = privateKey
+        bridge.call("signMessageV2", data, object : Callback {
+            override fun call(map: HashMap<String, Any>?) {
+                if (showLog) {
+                    println(map)
+                }
+                map?.let {
+                    val state = it["state"] as Boolean
+                    val signature = it["result"] as String
+                    val error = it["error"] as String
+                    onCompleted(state, signature, error)
+                }
+            }
+        })
+    }
+    public fun verifyMessageV2(message: String,signature: String, onCompleted: (Boolean, String, String) -> Unit) {
+        val data = HashMap<String, Any>()
+        data["message"] = message
+        data["signature"] = signature
+
+        bridge.call("verifyMessageV2", data, object : Callback {
+            override fun call(map: HashMap<String, Any>?) {
+                if (showLog) {
+                    println(map)
+                }
+                map?.let {
+                    val state = it["state"] as Boolean
+                    val base58Address = it["base58Address"] as String
+                    val error = it["error"] as String
+                    onCompleted(state, base58Address, error)
+                }
+            }
+        })
+    }
 
     public fun tronWebResetPrivateKey(newPrivateKey: String, onCompleted: (Boolean) -> Unit ){
         val data = java.util.HashMap<String, Any>()

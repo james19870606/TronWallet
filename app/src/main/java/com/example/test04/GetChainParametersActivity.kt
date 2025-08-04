@@ -1,4 +1,4 @@
-package com.james.tronwallet
+package com.example.test04
 
 import android.os.Bundle
 import android.webkit.WebView
@@ -6,10 +6,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.james.tronwallet.TronWeb
+import com.james.tronwallet.TRONMainNet
+import com.james.tronwallet.TRONNileNet
 
-class GetAccountResourceActivity : AppCompatActivity() {
+class GetChainParametersActivity : AppCompatActivity() {
     private var title: TextView? = null
-    private var address: EditText? = null
     private var accountDetail: TextView? = null
     private var getDetailBtn: Button? = null
     private var tronweb:TronWeb? = null
@@ -19,13 +21,12 @@ class GetAccountResourceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.account_resource_layout)
+        setContentView(R.layout.chain_parameters_layout)
         setupContent()
         getData()
     }
     private fun setupContent() {
         title = findViewById(R.id.title)
-        address = findViewById(R.id.address)
         accountDetail = findViewById(R.id.account_detail)
         getDetailBtn = findViewById(R.id.btn_getBalance)
         mWebView =  findViewById(R.id.webView)
@@ -53,17 +54,13 @@ class GetAccountResourceActivity : AppCompatActivity() {
         }
     }
     private fun getDetailAction(){
-        val address = address?.text.toString()
-        if (address.isNotEmpty()) {
             val onCompleted = {map:HashMap<String, Any> ->
                 this.runOnUiThread {
                     accountDetail?.text = map.toString()
                 }
             }
-            tronweb?.getAccountResource(
-                address ,
+            tronweb?.getChainParameters(
                 onCompleted = onCompleted)
-        }
     }
     private fun getData() {
         //接收传值
@@ -72,7 +69,7 @@ class GetAccountResourceActivity : AppCompatActivity() {
             action = bundle.getString("action") ?: ""
             position = bundle.getInt("position") ?: 0
             println("this position:$position  action:$action")
-            title?.text = if (position == 0) "主網獲取帳戶資源資訊" else "Nile測試網獲取帳戶資源資訊"
+            title?.text = if (position == 0) "主網鏈結上參數資訊" else "Nile鏈結上參數資訊"
         }
     }
 }
