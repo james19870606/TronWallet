@@ -4,7 +4,7 @@
 ![language](https://img.shields.io/badge/Language-Kotlin-green)
 [![jitpack](https://img.shields.io/badge/support-jitpack-green)]
 
-![](Resource/DemoImage0.png)
+![](Resource/DemoImage1.png)
 
 For more specific usage, please refer to the [demo](https://github.com/james19870606/TronWallet/tree/master/app)
 
