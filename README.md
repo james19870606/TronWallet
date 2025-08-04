@@ -185,7 +185,22 @@ tronweb?.getFeeEstimate(
     amount,
     onCompleted = onCompleted)
 ```
-
+##### signMessageV2
+```Kotlin
+val message = messageEditText?.getText().toString();
+val onCompleted = { state: Boolean, signature: String, error: String ->
+    updateSignDetails(state, signature, error)
+}
+tronWeb?.signMessageV2(message,"", onCompleted = onCompleted
+```
+##### verifyMessageV2
+```Kotlin
+val signature = signatureEditText?.getText().toString();
+val onCompleted = { state: Boolean,base58Address: String,  error: String ->
+    updateVerifyDetails(state, base58Address, error)
+}
+tronWeb?.verifyMessageV2("hello world",signature, onCompleted = onCompleted)
+```
 更详细的使用方法,建议参考 [demo](https://github.com/james19870606/TronWallet/tree/master/app)
 
 ## License
