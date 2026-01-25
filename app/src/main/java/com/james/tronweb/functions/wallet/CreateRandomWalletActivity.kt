@@ -1,0 +1,266 @@
+package com.james.tronweb.functions.wallet
+
+import android.content.ClipboardManager
+import android.content.Context
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
+import com.james.sdk.tronweb.TronWeb
+import com.james.tronweb.ui.theme.TronWebTheme
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+
+class CreateRandomWalletActivity : ComponentActivity() {
+
+    private lateinit var tronWeb: TronWeb
+    private var selectedNode: String = TronWeb.TRON_NILE_NET
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        
+        selectedNode = intent.getStringExtra("node") ?: TronWeb.TRON_NILE_NET
+        tronWeb = TronWeb(this)
+
+        setContent {
+            TronWebTheme {
+                Scaffold(
+                    topBar = {
+                        TopAppBar(
+                            title = { Text("Create Random Wallet") },
+                            navigationIcon = {
+                                IconButton(onClick = { finish() }) {
+                                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                                }
+                            }
+                        )
+                    },
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
+                    CreateRandomWalletScreen(
+                        modifier = Modifier.padding(innerPadding),
+                        selectedNode = selectedNode,
+                        tronWeb = tronWeb,
+                        scope = lifecycleScope
+                    )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CreateRandomWalletScreen(
+    modifier: Modifier = Modifier,
+    selectedNode: String,
+    tronWeb: TronWeb,
+    scope: kotlinx.coroutines.CoroutineScope
+) {
+    val context = LocalContext.current
+    var wordCount by remember { mutableStateOf(12) }
+    var selectedLanguage by remember { mutableStateOf("english") }
+    var resultText by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+    var isExpanded by remember { mutableStateOf(false) }
+
+    val languages = listOf(
+        "english", "chinese_simplified", "chinese_traditional",
+        "japanese", "korean", "french", "italian",
+        "spanish", "portuguese", "czech"
+    )
+
+    val wordCounts = listOf(12, 15, 18, 21, 24)
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Network Status
+        val isMainnet = selectedNode == TronWeb.TRON_MAINNET
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    if (isMainnet) Color(0xFF4CAF50) else Color(0xFFE91E63),
+                    shape = RoundedCornerShape(4.dp)
+                )
+                .padding(vertical = 4.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = if (isMainnet) "NETWORK: MAINNET" else "NETWORK: NILE TESTNET",
+                color = Color.White,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Word Count
+        Text(
+            text = "Mnemonic Word Count:",
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+        )
+        
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+            wordCounts.forEachIndexed { index, count ->
+                SegmentedButton(
+                    selected = wordCount == count,
+                    onClick = { wordCount = count },
+                    shape = SegmentedButtonDefaults.itemShape(index = index, count = wordCounts.size)
+                ) {
+                    Text(count.toString())
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Language
+        Text(
+            text = "Language:",
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        ExposedDropdownMenuBox(
+            expanded = isExpanded,
+            onExpandedChange = { isExpanded = !isExpanded },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = selectedLanguage,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth()
+            )
+            ExposedDropdownMenu(
+                expanded = isExpanded,
+                onDismissRequest = { isExpanded = false }
+            ) {
+                languages.forEach { lang ->
+                    DropdownMenuItem(
+                        text = { Text(lang) },
+                        onClick = {
+                            selectedLanguage = lang
+                            isExpanded = false
+                        }
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Create Button
+        Button(
+            onClick = {
+                scope.launch {
+                    isLoading = true
+                    resultText = "Creating wallet..."
+                    
+                    if (!tronWeb.isInitialized) {
+                        val (success, error) = tronWeb.setupAsync(node = selectedNode)
+                        if (!success) {
+                            resultText = "Setup Failed: $error"
+                            isLoading = false
+                            return@launch
+                        }
+                    }
+                    
+                    val response = tronWeb.createRandomAsync(wordCount, selectedLanguage)
+                    isLoading = false
+                    
+                    if (response != null) {
+                        resultText = JSONObject(response).toString(2)
+                    } else {
+                        resultText = "Failed to receive response from TronWeb"
+                    }
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            enabled = !isLoading,
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+            } else {
+                Text("Create Wallet")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Result TextView
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp)
+                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
+                .padding(8.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Text(
+                text = resultText,
+                fontFamily = FontFamily.Monospace,
+                fontSize = 12.sp
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Copy Button
+        TextButton(
+            onClick = {
+                if (resultText.isNotEmpty()) {
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = android.content.ClipData.newPlainText("TronWeb Result", resultText)
+                    clipboard.setPrimaryClip(clip)
+                    Toast.makeText(context, "Result copied to clipboard", Toast.LENGTH_SHORT).show()
+                }
+            },
+            enabled = resultText.isNotEmpty() && !isLoading
+        ) {
+            Text("Copy JSON Result")
+        }
+    }
+}

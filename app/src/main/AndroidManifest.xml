@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -11,10 +12,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Test04">
+        android:theme="@style/Theme.TronWeb">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.TronWeb">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,18 +25,25 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".TransferActivity" />
-        <activity android:name=".GetAccountActivity" />
-        <activity android:name=".GetBalanceActivity" />
-        <activity android:name=".ResetTronWebPrivateKeyActivity" />
-        <activity android:name=".CreateAccountActivity" />
-        <activity android:name=".ImportAccountFromMnemonicActivity" />
-        <activity android:name=".CreateRandomActivity" />
-        <activity android:name=".GetAccountResourceActivity" />
-        <activity android:name=".GetChainParametersActivity" />
-        <activity android:name=".FeeEstimateActivity" />
-        <activity android:name=".ImportAccountFromPrivateKeyActivity" />
-        <activity android:name=".SignMessageV2Activity" />
-        <activity android:name=".VerifyMessageV2Activity" />
+        <activity android:name=".functions.wallet.CreateRandomWalletActivity" android:label="Create Random Wallet" />
+        <activity android:name=".functions.wallet.ImportPrivateKeyActivity" android:label="Import Private Key" />
+        <activity android:name=".functions.wallet.ImportMnemonicActivity" android:label="Import Mnemonic" />
+        <activity android:name=".functions.wallet.SwitchWalletActivity" android:label="Switch Wallet" />
+        <activity android:name=".functions.wallet.CreateMultiSigActivity" android:label="Create Multi-Sig Address" />
+        <activity android:name=".functions.query.GetAccountInfoActivity" android:label="Get Account Info" />
+        <activity android:name=".functions.query.GetTRXBalanceActivity" android:label="Get TRX Balance" />
+        <activity android:name=".functions.query.GetTRC20BalanceActivity" android:label="Get TRC20 Balance" />
+        <activity android:name=".functions.query.GetAccountResourcesActivity" android:label="Get Account Resources" />
+        <activity android:name=".functions.query.GetChainParametersActivity" android:label="Get Chain Parameters" />
+        <activity android:name=".functions.transfer.TRXTransferActivity" android:label="TRX Transfer" />
+        <activity android:name=".functions.transfer.TRC20TransferActivity" android:label="TRC20 Transfer" />
+        <activity android:name=".functions.transfer.MultiSigTRXTransferActivity" android:label="Multi-Sig TRX Transfer" />
+        <activity android:name=".functions.transfer.MultiSigTRC20TransferActivity" android:label="Multi-Sig TRC20 Transfer" />
+        <activity android:name=".functions.transfer.FreezeBalanceActivity" android:label="Freeze Balance" />
+        <activity android:name=".functions.transfer.UnfreezeBalanceActivity" android:label="Unfreeze Balance" />
+        <activity android:name=".functions.transfer.DelegateResourceActivity" android:label="Delegate Resource" />
+        <activity android:name=".functions.message.SignMessageActivity" android:label="Sign Message" />
+        <activity android:name=".functions.message.VerifyMessageActivity" android:label="Verify Message" />
     </application>
+
 </manifest>
