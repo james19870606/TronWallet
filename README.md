@@ -17,191 +17,220 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.james19870606:TronWallet:1.1.2'
+    implementation 'com.github.james19870606:TronWallet:1.1.3'
 }
 ```
+# TronWeb Android SDK Usage Guide
 
-##### Setup TronWeb 
+This guide provides example code for integrating the TronWeb Android SDK into your Kotlin-based Android applications. The SDK supports both callback-based and Coroutine-based asynchronous operations.
+
+## 1. Setup & Initialization
+
+First, initialize the `TronWeb` instance with a network node and an optional API key.
+
 ```kotlin
-val onCompleted = {result : Boolean,error : String ->
-   //......
-}
-val privateKey = ""
+val tronWeb = TronWeb(context)
 
-val node = if(position == 0) TRONMainNet else TRONNileNet
-
-if (tronweb?.isGenerateTronWebInstanceSuccess == false) {
-
-  tronweb?.setup(true, privateKey, node = node,onCompleted = onCompleted)
-
-} else  {
-
-}
-```
-##### Create Random
-```Kotlin
-val onCompleted = {state: Boolean, address: String, privateKey: String, publicKey: String, mnemonic: String, error: String ->
-       runOnUiThread {
-        val text = """
-            address: $address
-
-            mnemonic: $mnemonic
-
-            privateKey: $privateKey
-
-            publicKey: $publicKey
-        """
-        walletDetail?.setText(if (state) text else error)
-    }    
-  }
-tronweb?.createRandom(onCompleted = onCompleted)
-```
-
-##### Create Account
-```Kotlin
-val onCompleted = { state: Boolean, hexAddress: String, base58Address: String, privateKey: String, publicKey: String, error: String ->
-  runOnUiThread {
-            val text = """
-                hexAddress: $hexAddress
+// Asynchronous setup using Coroutines
+lifecycleScope.launch {
+    val (success, error) = tronWeb.setupAsync(
+        node = TronWeb.TRON_NILE_NET, // Or TronWeb.TRON_MAINNET
+        apiKey = "your-api-key"
+    )
     
-                base58Address: $base58Address
-    
-                privateKey: $privateKey
-    
-                publicKey: $publicKey
-            """
-            walletDetail?.setText(if (state) text else error)
-     }
-}
-tronweb?.createAccount(onCompleted = onCompleted)
-```
-##### Import Account From Mnemonic
-```Kotlin
-val mnemonic = mnemonicEditText?.getText().toString();
-val onCompleted = { state: Boolean, address: String, privateKey: String, publicKey: String, error: String ->
-     runOnUiThread {
-            val text = """
-                address: $address
-    
-                privateKey: $privateKey
-    
-                publicKey: $publicKey
-            """
-            walletDetail?.setText(if (state) text else error)
-        }
-}
-tronweb?.importAccountFromMnemonic(mnemonic, onCompleted = onCompleted)
-```
-##### Import Account From PrivateKey
-```Kotlin
-val privateKey = privateKeyEditText?.getText().toString();
-val onCompleted = { state: Boolean,base58: String, hex: String, error: String ->
-    runOnUiThread {
-    val text = """
-        base58: $base58
-
-        hex: $hex
-    """
-    walletDetail?.setText(if (state) text else error)
-}
-}
-tronweb?.importAccountFromPrivateKey(privateKey, onCompleted = onCompleted)
-```
-##### Send TRX
-```Kotlin
-val onCompleted = {state : Boolean, txid: String ,error:String->
-    this.runOnUiThread {
-        if (state){
-            hashValue?.text = txid
-        } else {
-            hashValue?.text = error
-        }
+    if (success) {
+        Log.d("TronWeb", "Initialization successful")
+    } else {
+        Log.e("TronWeb", "Initialization failed: $error")
     }
 }
-tronweb?.trxTransferWithOutRemark(
-    toAddress ,
-    amount ,
-    onCompleted = onCompleted)
+```
 
-```
-##### Send TRC20
-```Kotlin
-val onCompleted = {state : Boolean, txid: String,error:String ->
-    this.runOnUiThread {
-        if (state){
-            hashValue?.text = txid
-        } else {
-            hashValue?.text = error
-        }
-    }
-}
-tronweb?.trc20TokenTransfer(
-    toAddress,
-    trc20ContractAddress,
-    amount,
-    remark,
-    onCompleted = onCompleted)
-```
-##### Fee Estimate When Send TRX
-```Kotlin
-val toAddress = receiveEditText?.text.toString()
-val amount = amountEditText?.text.toString()
-val note = "Test data"
-val onCompleted = {state : Boolean, sendAccountResources:LinkedTreeMap<String, Any>,feeDic:LinkedTreeMap<String, Any>,error:String ->
-    this.runOnUiThread {
-        if (state){
-            val activationFee = feeDic["activationFee"] as Double
-            val noteFee = feeDic["noteFee"] as Double
-            val requiredBandwidth = feeDic["requiredBandwidth"] as Double
-            val totalFee = activationFee + noteFee + requiredBandwidth / 1000
-            hashValue?.text =
-                "Resource Consumed  ${requiredBandwidth.toInt()} Bandwidth  \nFee    $totalFee TRX"
+## 2. Wallet Management
 
-        } else {
-            hashValue?.text = error
-        }
+### Create Random Wallet
+```kotlin
+val response = tronWeb.createRandomAsync(wordCount = 12, language = "english")
+// Returns mnemonic, privateKey, publicKey, address
+```
+
+### Import Account from Mnemonic
+```kotlin
+val mnemonic = "word1 word2 ..."
+val response = tronWeb.importAccountFromMnemonicAsync(mnemonic)
+```
+
+### Import Account from Private Key
+```kotlin
+val privateKey = "your-private-key"
+val response = tronWeb.importAccountFromPrivateKeyAsync(privateKey)
+```
+
+### Create Multi-Sig Address
+```kotlin
+val owners = listOf("Address1", "Address2")
+val response = tronWeb.createMultiSigAddressAsync(
+    ownerAddress = "YourAddress",
+    owners = owners,
+    required = 2,
+    privateKey = "YourPrivateKey"
+)
+```
+
+## 3. Account Query
+
+### Get Account Details
+```kotlin
+val response = tronWeb.getAccountAsync("Address")
+// Returns full account info from blockchain
+```
+
+### Get TRX Balance
+```kotlin
+val response = tronWeb.getTRXBalanceAsync("Address")
+// response["balance"] contains TRX amount
+```
+
+### Get TRC20 Token Balance
+```kotlin
+val response = tronWeb.getTRC20TokenBalanceAsync(
+    contractAddress = "TR7NHqjeKQxGChDe8n9u6616v4ALny7nv8", // USDT
+    address = "TargetAddress"
+)
+```
+
+### Get Account Resources (Energy/Bandwidth)
+```kotlin
+val response = tronWeb.getAccountResourcesAsync("Address")
+```
+
+### Get Chain Parameters
+```kotlin
+val response = tronWeb.getChainParametersAsync()
+// Returns network parameters like proposal details
+```
+
+## 4. Message Signing & Verification
+
+### Sign Message (TIP-191)
+```kotlin
+val response = tronWeb.signMessageV2Async("Hello TRON", "PrivateKey")
+// Returns signature hex
+```
+
+### Verify Message
+```kotlin
+val response = tronWeb.verifyMessageV2Async(
+    message = "Hello TRON",
+    signature = "SignatureHex",
+    address = "ExpectedAddress"
+)
+// Returns boolean state
+```
+
+## 5. Transaction Operations (Single-Sig)
+
+### TRX Transfer
+```kotlin
+val response = tronWeb.trxTransferAsync(
+    toAddress = "ReceiverAddress",
+    amount = 1.0, // 1 TRX
+    privateKey = "SenderPrivateKey"
+)
+```
+
+### TRC20 Token Transfer
+```kotlin
+val response = tronWeb.trc20TransferAsync(
+    contractAddress = "TokenContractAddress",
+    toAddress = "ReceiverAddress",
+    amount = 10.0,
+    privateKey = "SenderPrivateKey"
+)
+```
+
+### Estimate Fees
+```kotlin
+// Estimate TRX Transfer Fee
+val trxFee = tronWeb.estimateTrxFeeAsync("To", 1.0, "From")
+
+// Estimate TRC20 Transfer Fee
+val trc20Fee = tronWeb.estimateTrc20FeeAsync("Contract", "To", 10.0, "From")
+```
+
+## 6. Multi-Sig Operations
+
+### Multi-Sig TRX Transfer
+```kotlin
+val response = tronWeb.multiSigTrxTransferAsync(
+    fromAddress = "MultiSigAddress",
+    toAddress = "ReceiverAddress",
+    amount = 1.0,
+    privateKeys = listOf("Key1", "Key2"), // Enough keys to satisfy weight
+    permissionId = 2 // Usually 2 for Active permission
+)
+```
+
+### Estimate Multi-Sig Fees
+```kotlin
+val fee = tronWeb.estimateMultiSigTrxFeeAsync(
+    fromAddress = "MultiSigAddress",
+    toAddress = "To",
+    amount = 1.0,
+    privateKeysCount = 2
+)
+```
+
+## 7. Resource Staking (Stake 2.0)
+
+### Freeze TRX for Energy/Bandwidth
+```kotlin
+val response = tronWeb.freezeBalanceAsync(
+    amount = 100.0,
+    resourceType = "ENERGY", // or "BANDWIDTH"
+    privateKey = "YourPrivateKey"
+)
+```
+
+### Unfreeze TRX
+```kotlin
+val response = tronWeb.unfreezeBalanceAsync(
+    amount = 100.0,
+    resourceType = "ENERGY",
+    privateKey = "YourPrivateKey"
+)
+```
+
+### Delegate Resource to Another Address
+```kotlin
+val response = tronWeb.delegateResourceAsync(
+    amount = 50.0,
+    resourceType = "ENERGY",
+    receiverAddress = "ReceiverAddress",
+    privateKey = "YourPrivateKey"
+)
+```
+
+---
+
+## Error Handling
+
+All `Async` methods return a `Map<String, Any>?`. You can check the `state` or `error` field in the response:
+
+```kotlin
+val response = tronWeb.getTRXBalanceAsync(address)
+if (response != null) {
+    val state = response["state"] as? Boolean ?: false
+    if (state) {
+        val balance = response["balance"]
+        Log.d("TronWeb", "Balance: $balance")
+    } else {
+        val error = response["error"] as? String ?: "Unknown error"
+        Log.e("TronWeb", "Error: $error")
     }
 }
-tronweb?.estimateTRXTransferFee(toAddress, note, amount, onCompleted)
 ```
-##### Fee Estimate When Send TRC20
-```Kotlin
-val onCompleted = {state : Boolean, energyUsed:Double,energyFee:Double,error:String ->
-    this.runOnUiThread {
-        if (state){
-            val trxFee =  (energyUsed * energyFee) / 1_000_000
-            hashValue?.text =
-                "Resource Consumed  339 Bandwidth $energyUsed Energy\nFee    $trxFee TRX"
-        } else {
-            hashValue?.text = error
-        }
-    }
-}
-val url = if(position == 0) TRONMainNet else TRONNileNet
-tronweb?.getFeeEstimate(
-    url,
-    toAddress,
-    trc20ContractAddress,
-    amount,
-    onCompleted = onCompleted)
-```
-##### signMessageV2
-```Kotlin
-val message = messageEditText?.getText().toString();
-val onCompleted = { state: Boolean, signature: String, error: String ->
-    updateSignDetails(state, signature, error)
-}
-tronWeb?.signMessageV2(message,"", onCompleted = onCompleted
-```
-##### verifyMessageV2
-```Kotlin
-val signature = signatureEditText?.getText().toString();
-val onCompleted = { state: Boolean,base58Address: String,  error: String ->
-    updateVerifyDetails(state, base58Address, error)
-}
-tronWeb?.verifyMessageV2("hello world",signature, onCompleted = onCompleted)
-```
-更详细的使用方法,建议参考 [demo](https://github.com/james19870606/TronWallet/tree/master/app)
+
 
 ## License
 

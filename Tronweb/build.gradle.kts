@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.github.james19870606"
-version = "1.0.0"
+version = "1.1.3"
 
 android {
     namespace = "com.james.sdk.tronweb"
