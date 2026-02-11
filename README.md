@@ -17,7 +17,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.james19870606:TronWallet:1.1.3'
+    implementation 'com.github.james19870606:TronWallet:1.1.4'
 }
 ```
 # TronWeb Android SDK Usage Guide
@@ -135,7 +135,8 @@ val response = tronWeb.verifyMessageV2Async(
 val response = tronWeb.trxTransferAsync(
     toAddress = "ReceiverAddress",
     amount = 1.0, // 1 TRX
-    privateKey = "SenderPrivateKey"
+    privateKey = "SenderPrivateKey",
+    remark.trim().ifEmpty { null }
 )
 ```
 
@@ -145,7 +146,8 @@ val response = tronWeb.trc20TransferAsync(
     contractAddress = "TokenContractAddress",
     toAddress = "ReceiverAddress",
     amount = 10.0,
-    privateKey = "SenderPrivateKey"
+    privateKey = "SenderPrivateKey",
+    remark.trim().ifEmpty { null }
 )
 ```
 
@@ -167,7 +169,8 @@ val response = tronWeb.multiSigTrxTransferAsync(
     toAddress = "ReceiverAddress",
     amount = 1.0,
     privateKeys = listOf("Key1", "Key2"), // Enough keys to satisfy weight
-    permissionId = 2 // Usually 2 for Active permission
+    permissionId = 2, // Usually 2 for Active permission
+    remark.trim().ifEmpty { null }
 )
 ```
 
