@@ -88,6 +88,7 @@ fun TRC20TransferScreen(
     var fromAddress by remember { mutableStateOf("") }
     var toAddress by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
+    var remark by remember { mutableStateOf("") }
     var privateKey by remember { mutableStateOf("") }
     
     var resultText by remember { mutableStateOf("") }
@@ -193,6 +194,23 @@ fun TRC20TransferScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Remark
+        Text(
+            text = "Remark (Memo):",
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+        )
+        OutlinedTextField(
+            value = remark,
+            onValueChange = { remark = it },
+            placeholder = { Text("Optional memo") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // Private Key
         Text(
             text = "Sender Private Key (Hex):",
@@ -228,7 +246,7 @@ fun TRC20TransferScreen(
                         if (!tronWeb.isInitialized) {
                             tronWeb.setupAsync(privateKey = "01", node = selectedNode)
                         }
-                        val response = tronWeb.estimateTrc20FeeAsync(contractAddress.trim(), toAddress.trim(), amt, fromAddress.trim())
+                        val response = tronWeb.estimateTrc20FeeAsync(contractAddress.trim(), toAddress.trim(), amt, fromAddress.trim(), remark.trim().ifEmpty { null })
                         isEstimating = false
                         if (response != null) {
                             resultText = JSONObject(response).toString(2)
@@ -265,7 +283,7 @@ fun TRC20TransferScreen(
                                 return@launch
                             }
                         }
-                        val response = tronWeb.trc20TransferAsync(contractAddress.trim(), toAddress.trim(), amt, privateKey.trim())
+                        val response = tronWeb.trc20TransferAsync(contractAddress.trim(), toAddress.trim(), amt, privateKey.trim(), remark.trim().ifEmpty { null })
                         isLoading = false
                         if (response != null) {
                             resultText = JSONObject(response).toString(2)

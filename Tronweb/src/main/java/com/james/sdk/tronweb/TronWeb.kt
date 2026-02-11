@@ -303,116 +303,130 @@ class TronWeb(private val context: Context) {
 
     // MARK: - Transaction Operations
 
-    fun trxTransfer(toAddress: String, amount: Double, privateKey: String, completion: (Map<String, Any>?) -> Unit) {
-        val params = mapOf("toAddress" to toAddress, "amount" to amount, "privateKey" to privateKey)
+    fun trxTransfer(toAddress: String, amount: Double, privateKey: String, remark: String? = null, completion: (Map<String, Any>?) -> Unit) {
+        val params = mutableMapOf<String, Any>(
+            "toAddress" to toAddress,
+            "amount" to amount,
+            "privateKey" to privateKey
+        )
+        remark?.let { params["remark"] = it }
         bridge?.call("trxTransfer", params) { response ->
             @Suppress("UNCHECKED_CAST")
             completion(response as? Map<String, Any>)
         }
     }
 
-    suspend fun trxTransferAsync(toAddress: String, amount: Double, privateKey: String): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
-        trxTransfer(toAddress, amount, privateKey) { response ->
+    suspend fun trxTransferAsync(toAddress: String, amount: Double, privateKey: String, remark: String? = null): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
+        trxTransfer(toAddress, amount, privateKey, remark) { response ->
             continuation.resume(response)
         }
     }
 
-    fun trc20Transfer(contractAddress: String, toAddress: String, amount: Double, privateKey: String, completion: (Map<String, Any>?) -> Unit) {
-        val params = mapOf(
+    fun trc20Transfer(contractAddress: String, toAddress: String, amount: Double, privateKey: String, remark: String? = null, completion: (Map<String, Any>?) -> Unit) {
+        val params = mutableMapOf<String, Any>(
             "contractAddress" to contractAddress,
             "toAddress" to toAddress,
             "amount" to amount,
             "privateKey" to privateKey
         )
+        remark?.let { params["remark"] = it }
         bridge?.call("trc20Transfer", params) { response ->
             @Suppress("UNCHECKED_CAST")
             completion(response as? Map<String, Any>)
         }
     }
 
-    suspend fun trc20TransferAsync(contractAddress: String, toAddress: String, amount: Double, privateKey: String): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
-        trc20Transfer(contractAddress, toAddress, amount, privateKey) { response ->
+    suspend fun trc20TransferAsync(contractAddress: String, toAddress: String, amount: Double, privateKey: String, remark: String? = null): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
+        trc20Transfer(contractAddress, toAddress, amount, privateKey, remark) { response ->
             continuation.resume(response)
         }
     }
 
-    fun estimateTrxFee(toAddress: String, amount: Double, fromAddress: String, completion: (Map<String, Any>?) -> Unit) {
-        val params = mapOf("toAddress" to toAddress, "amount" to amount, "fromAddress" to fromAddress)
+    fun estimateTrxFee(toAddress: String, amount: Double, fromAddress: String, remark: String? = null, completion: (Map<String, Any>?) -> Unit) {
+        val params = mutableMapOf<String, Any>(
+            "toAddress" to toAddress,
+            "amount" to amount,
+            "fromAddress" to fromAddress
+        )
+        remark?.let { params["remark"] = it }
         bridge?.call("estimateTrxFee", params) { response ->
             @Suppress("UNCHECKED_CAST")
             completion(response as? Map<String, Any>)
         }
     }
 
-    suspend fun estimateTrxFeeAsync(toAddress: String, amount: Double, fromAddress: String): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
-        estimateTrxFee(toAddress, amount, fromAddress) { response ->
+    suspend fun estimateTrxFeeAsync(toAddress: String, amount: Double, fromAddress: String, remark: String? = null): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
+        estimateTrxFee(toAddress, amount, fromAddress, remark) { response ->
             continuation.resume(response)
         }
     }
 
-    fun estimateTrc20Fee(contractAddress: String, toAddress: String, amount: Double, fromAddress: String, completion: (Map<String, Any>?) -> Unit) {
-        val params = mapOf(
+    fun estimateTrc20Fee(contractAddress: String, toAddress: String, amount: Double, fromAddress: String, remark: String? = null, completion: (Map<String, Any>?) -> Unit) {
+        val params = mutableMapOf<String, Any>(
             "contractAddress" to contractAddress,
             "toAddress" to toAddress,
             "amount" to amount,
             "fromAddress" to fromAddress
         )
+        remark?.let { params["remark"] = it }
         bridge?.call("estimateTrc20Fee", params) { response ->
             @Suppress("UNCHECKED_CAST")
             completion(response as? Map<String, Any>)
         }
     }
 
-    suspend fun estimateTrc20FeeAsync(contractAddress: String, toAddress: String, amount: Double, fromAddress: String): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
-        estimateTrc20Fee(contractAddress, toAddress, amount, fromAddress) { response ->
+    suspend fun estimateTrc20FeeAsync(contractAddress: String, toAddress: String, amount: Double, fromAddress: String, remark: String? = null): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
+        estimateTrc20Fee(contractAddress, toAddress, amount, fromAddress, remark) { response ->
             continuation.resume(response)
         }
     }
 
     // MARK: - Multi-Sig Operations
 
-    fun multiSigTrxTransfer(fromAddress: String, toAddress: String, amount: Double, privateKeys: List<String>, permissionId: Int = 2, completion: (Map<String, Any>?) -> Unit) {
-        val params = mapOf(
+    fun multiSigTrxTransfer(fromAddress: String, toAddress: String, amount: Double, privateKeys: List<String>, permissionId: Int = 2, remark: String? = null, completion: (Map<String, Any>?) -> Unit) {
+        val params = mutableMapOf<String, Any>(
             "fromAddress" to fromAddress,
             "toAddress" to toAddress,
             "amount" to amount,
             "privateKeys" to privateKeys,
             "permissionId" to permissionId
         )
+        remark?.let { params["remark"] = it }
         bridge?.call("multiSigTrxTransfer", params) { response ->
             @Suppress("UNCHECKED_CAST")
             completion(response as? Map<String, Any>)
         }
     }
 
-    suspend fun multiSigTrxTransferAsync(fromAddress: String, toAddress: String, amount: Double, privateKeys: List<String>, permissionId: Int = 2): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
-        multiSigTrxTransfer(fromAddress, toAddress, amount, privateKeys, permissionId) { response ->
+    suspend fun multiSigTrxTransferAsync(fromAddress: String, toAddress: String, amount: Double, privateKeys: List<String>, permissionId: Int = 2, remark: String? = null): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
+        multiSigTrxTransfer(fromAddress, toAddress, amount, privateKeys, permissionId, remark) { response ->
             continuation.resume(response)
         }
     }
 
-    fun estimateMultiSigTrxFee(fromAddress: String, toAddress: String, amount: Double, privateKeysCount: Int, permissionId: Int = 2, completion: (Map<String, Any>?) -> Unit) {
-        val params = mapOf(
+    fun estimateMultiSigTrxFee(fromAddress: String, toAddress: String, amount: Double, privateKeysCount: Int, permissionId: Int = 2, remark: String? = null, completion: (Map<String, Any>?) -> Unit) {
+        val params = mutableMapOf<String, Any>(
             "fromAddress" to fromAddress,
             "toAddress" to toAddress,
             "amount" to amount,
             "privateKeysCount" to privateKeysCount,
             "permissionId" to permissionId
         )
+        remark?.let { params["remark"] = it }
         bridge?.call("estimateMultiSigTrxFee", params) { response ->
             @Suppress("UNCHECKED_CAST")
             completion(response as? Map<String, Any>)
         }
     }
 
-    suspend fun estimateMultiSigTrxFeeAsync(fromAddress: String, toAddress: String, amount: Double, privateKeysCount: Int, permissionId: Int = 2): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
-        estimateMultiSigTrxFee(fromAddress, toAddress, amount, privateKeysCount, permissionId) { response ->
+    suspend fun estimateMultiSigTrxFeeAsync(fromAddress: String, toAddress: String, amount: Double, privateKeysCount: Int, permissionId: Int = 2, remark: String? = null): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
+        estimateMultiSigTrxFee(fromAddress, toAddress, amount, privateKeysCount, permissionId, remark) { response ->
             continuation.resume(response)
         }
     }
 
-    fun multiSigTrc20Transfer(contractAddress: String, fromAddress: String, toAddress: String, amount: Double, privateKeys: List<String>, permissionId: Int = 2, completion: (Map<String, Any>?) -> Unit) {
-        val params = mapOf(
+    fun multiSigTrc20Transfer(contractAddress: String, fromAddress: String, toAddress: String, amount: Double, privateKeys: List<String>, permissionId: Int = 2, remark: String? = null, completion: (Map<String, Any>?) -> Unit) {
+        val params = mutableMapOf<String, Any>(
             "contractAddress" to contractAddress,
             "fromAddress" to fromAddress,
             "toAddress" to toAddress,
@@ -420,20 +434,21 @@ class TronWeb(private val context: Context) {
             "privateKeys" to privateKeys,
             "permissionId" to permissionId
         )
+        remark?.let { params["remark"] = it }
         bridge?.call("multiSigTrc20Transfer", params) { response ->
             @Suppress("UNCHECKED_CAST")
             completion(response as? Map<String, Any>)
         }
     }
 
-    suspend fun multiSigTrc20TransferAsync(contractAddress: String, fromAddress: String, toAddress: String, amount: Double, privateKeys: List<String>, permissionId: Int = 2): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
-        multiSigTrc20Transfer(contractAddress, fromAddress, toAddress, amount, privateKeys, permissionId) { response ->
+    suspend fun multiSigTrc20TransferAsync(contractAddress: String, fromAddress: String, toAddress: String, amount: Double, privateKeys: List<String>, permissionId: Int = 2, remark: String? = null): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
+        multiSigTrc20Transfer(contractAddress, fromAddress, toAddress, amount, privateKeys, permissionId, remark) { response ->
             continuation.resume(response)
         }
     }
 
-    fun estimateMultiSigTrc20Fee(contractAddress: String, fromAddress: String, toAddress: String, amount: Double, privateKeysCount: Int, permissionId: Int = 2, completion: (Map<String, Any>?) -> Unit) {
-        val params = mapOf(
+    fun estimateMultiSigTrc20Fee(contractAddress: String, fromAddress: String, toAddress: String, amount: Double, privateKeysCount: Int, permissionId: Int = 2, remark: String? = null, completion: (Map<String, Any>?) -> Unit) {
+        val params = mutableMapOf<String, Any>(
             "contractAddress" to contractAddress,
             "fromAddress" to fromAddress,
             "toAddress" to toAddress,
@@ -441,14 +456,15 @@ class TronWeb(private val context: Context) {
             "privateKeysCount" to privateKeysCount,
             "permissionId" to permissionId
         )
+        remark?.let { params["remark"] = it }
         bridge?.call("estimateMultiSigTrc20Fee", params) { response ->
             @Suppress("UNCHECKED_CAST")
             completion(response as? Map<String, Any>)
         }
     }
 
-    suspend fun estimateMultiSigTrc20FeeAsync(contractAddress: String, fromAddress: String, toAddress: String, amount: Double, privateKeysCount: Int, permissionId: Int = 2): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
-        estimateMultiSigTrc20Fee(contractAddress, fromAddress, toAddress, amount, privateKeysCount, permissionId) { response ->
+    suspend fun estimateMultiSigTrc20FeeAsync(contractAddress: String, fromAddress: String, toAddress: String, amount: Double, privateKeysCount: Int, permissionId: Int = 2, remark: String? = null): Map<String, Any>? = suspendCancellableCoroutine { continuation ->
+        estimateMultiSigTrc20Fee(contractAddress, fromAddress, toAddress, amount, privateKeysCount, permissionId, remark) { response ->
             continuation.resume(response)
         }
     }

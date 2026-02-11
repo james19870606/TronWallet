@@ -87,6 +87,7 @@ fun TRXTransferScreen(
     var fromAddress by remember { mutableStateOf("") }
     var toAddress by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
+    var remark by remember { mutableStateOf("") }
     var privateKey by remember { mutableStateOf("") }
     
     var resultText by remember { mutableStateOf("") }
@@ -175,6 +176,23 @@ fun TRXTransferScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Remark
+        Text(
+            text = "Remark (Memo):",
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+        )
+        OutlinedTextField(
+            value = remark,
+            onValueChange = { remark = it },
+            placeholder = { Text("Optional memo") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // Private Key
         Text(
             text = "Sender Private Key (Hex):",
@@ -210,7 +228,7 @@ fun TRXTransferScreen(
                         if (!tronWeb.isInitialized) {
                             tronWeb.setupAsync(privateKey = "01", node = selectedNode)
                         }
-                        val response = tronWeb.estimateTrxFeeAsync(toAddress.trim(), amt, fromAddress.trim())
+                        val response = tronWeb.estimateTrxFeeAsync(toAddress.trim(), amt, fromAddress.trim(), remark.trim().ifEmpty { null })
                         isEstimating = false
                         if (response != null) {
                             resultText = JSONObject(response).toString(2)
@@ -247,7 +265,7 @@ fun TRXTransferScreen(
                                 return@launch
                             }
                         }
-                        val response = tronWeb.trxTransferAsync(toAddress.trim(), amt, privateKey.trim())
+                        val response = tronWeb.trxTransferAsync(toAddress.trim(), amt, privateKey.trim(), remark.trim().ifEmpty { null })
                         isLoading = false
                         if (response != null) {
                             resultText = JSONObject(response).toString(2)

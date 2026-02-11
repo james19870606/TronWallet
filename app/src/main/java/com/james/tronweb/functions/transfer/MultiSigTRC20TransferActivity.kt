@@ -87,6 +87,7 @@ fun MultiSigTRC20TransferScreen(
     var fromAddress by remember { mutableStateOf("") }
     var toAddress by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
+    var remark by remember { mutableStateOf("") }
     var privateKeysText by remember { mutableStateOf("") }
     var permissionId by remember { mutableStateOf("2") }
     
@@ -193,6 +194,23 @@ fun MultiSigTRC20TransferScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Remark
+        Text(
+            text = "Remark (Memo):",
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+        )
+        OutlinedTextField(
+            value = remark,
+            onValueChange = { remark = it },
+            placeholder = { Text("Optional memo") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // Private Keys
         Text(
             text = "Signer Private Keys (One per line):",
@@ -247,7 +265,7 @@ fun MultiSigTRC20TransferScreen(
                         if (!tronWeb.isInitialized) {
                             tronWeb.setupAsync(privateKey = "01", node = selectedNode)
                         }
-                        val response = tronWeb.estimateMultiSigTrc20FeeAsync(contractAddress.trim(), fromAddress.trim(), toAddress.trim(), amt, keysCount, pId)
+                        val response = tronWeb.estimateMultiSigTrc20FeeAsync(contractAddress.trim(), fromAddress.trim(), toAddress.trim(), amt, keysCount, pId, remark.trim().ifEmpty { null })
                         isEstimating = false
                         if (response != null) {
                             resultText = JSONObject(response).toString(2)
@@ -285,7 +303,7 @@ fun MultiSigTRC20TransferScreen(
                             isLoading = false
                             return@launch
                         }
-                        val response = tronWeb.multiSigTrc20TransferAsync(contractAddress.trim(), fromAddress.trim(), toAddress.trim(), amt, keys, pId)
+                        val response = tronWeb.multiSigTrc20TransferAsync(contractAddress.trim(), fromAddress.trim(), toAddress.trim(), amt, keys, pId, remark.trim().ifEmpty { null })
                         isLoading = false
                         if (response != null) {
                             resultText = JSONObject(response).toString(2)
